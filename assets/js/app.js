@@ -413,6 +413,7 @@
   var THUMBS = {};
   var PDFJS_VER = "3.11.174";
   var LS_PREFIX = "thumb:v2:";
+  var MAX_AUTO_THUMB = 3 * 1024 * 1024;   // فوق 3 ميجا: لا تُولّد معاينة تلقائيًا كي يفتح الموقع فورًا
 
   function lsGet(url) {
     try { return localStorage.getItem(LS_PREFIX + url) || ""; } catch (e) { return ""; }
@@ -471,7 +472,7 @@
     // تجنّب تحميل ملف ضخم لمجرّد صورة مصغّرة (كتالوجات كبيرة) — عندها يظل الشكل الافتراضي
     fetch(encUrl(url), { method: "HEAD" }).then(function (r) {
       var len = parseInt(r.headers.get("content-length") || "0", 10);
-      if (len && len > 12 * 1024 * 1024) { cover.classList.remove("is-loading"); return; }
+      if (len && len > MAX_AUTO_THUMB) { cover.classList.remove("is-loading"); return; }
       drawThumb(cover, url);
     }).catch(function () { drawThumb(cover, url); });
   }

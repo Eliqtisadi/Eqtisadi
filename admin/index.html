@@ -50,6 +50,18 @@
   </style>
 </head>
 <body>
+  <!-- فرض اتجاه من اليمين لليسار (Sveltia يضبط الاتجاه حسب لغة المتصفح) -->
+  <script>
+    (function () {
+      var el = document.documentElement;
+      function forceRtl() { if (el.getAttribute("dir") !== "rtl") el.setAttribute("dir", "rtl"); }
+      forceRtl();
+      try {
+        new MutationObserver(forceRtl).observe(el, { attributes: true, attributeFilter: ["dir"] });
+      } catch (e) {}
+    })();
+  </script>
+
   <!-- Sveltia CMS — واجهة حديثة وسريعة، تقرأ نفس config.yml وتستخدم نفس تسجيل الدخول -->
   <script src="https://unpkg.com/@sveltia/cms/dist/sveltia-cms.js" type="module"></script>
 </body>
