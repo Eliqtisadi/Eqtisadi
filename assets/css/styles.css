@@ -248,6 +248,12 @@ html[lang="en"] .hero-choice-arrow{transform:scaleX(-1)}
   background:repeating-linear-gradient(135deg, var(--surface-2), var(--surface-2) 12px, color-mix(in srgb,var(--ink) 3%, var(--surface-2)) 12px, color-mix(in srgb,var(--ink) 3%, var(--surface-2)) 24px);
 }
 .offer-cover.is-placeholder svg{width:52px;height:52px;color:var(--ink);opacity:.28;stroke-width:1.3}
+/* مؤشر تحميل أثناء توليد معاينة الـ PDF */
+.offer-cover.is-loading::after{
+  content:"";position:absolute;inset:0;
+  background:linear-gradient(90deg, transparent 20%, color-mix(in srgb,#fff 55%, transparent) 50%, transparent 80%);
+  background-size:200% 100%;animation:shimmer 1.2s infinite;
+}
 .badge{
   position:absolute;top:12px;inset-inline-start:12px;
   padding:5px 11px;border-radius:8px;font-size:11.5px;font-weight:800;color:#fff;

@@ -404,8 +404,24 @@
   }
 
   /* ---------------------- PDF first-page thumbnails ------------------------ */
-  var THUMBS = {};            // pdf url -> data:image (cache across filter changes)
+  // ذاكرة الجلسة + تخزين دائم في المتصفح => تظهر المعاينة فورًا في الزيارات التالية
+  var THUMBS = {};
   var PDFJS_VER = "3.11.174";
+  var LS_PREFIX = "thumb:v2:";
+
+  function lsGet(url) {
+    try { return localStorage.getItem(LS_PREFIX + url) || ""; } catch (e) { return ""; }
+  }
+  function lsSet(url, data) {
+    try { localStorage.setItem(LS_PREFIX + url, data); }
+    catch (e) {
+      // الحصّة ممتلئة: نظّف معاينات قديمة وأعد المحاولة مرة واحدة
+      try {
+        Object.keys(localStorage).forEach(function (k) { if (k.indexOf(LS_PREFIX) === 0) localStorage.removeItem(k); });
+        localStorage.setItem(LS_PREFIX + url, data);
+      } catch (e2) {}
+    }
+  }
 
   function ensurePdfJs(cb) {
     if (window.pdfjsLib) { cb(); return; }
@@ -431,6 +447,7 @@
     var start = function (cover) {
       var url = cover.getAttribute("data-thumb");
       cover.removeAttribute("data-thumb");
+      cover.classList.add("is-loading");     // مؤشر تحميل أثناء التوليد
       renderThumb(cover, url);
     };
     if ("IntersectionObserver" in window) {
@@ -454,15 +471,25 @@
     }).catch(function () { drawThumb(cover, url); });
   }
 
+  function applyThumb(cover, url, data) {
+    THUMBS[url] = data;
+    var svgEl = cover.querySelector("svg");
+    if (svgEl) svgEl.remove();
+    cover.classList.remove("is-placeholder", "is-loading");
+    var img = new Image();
+    img.src = data; img.alt = ""; img.loading = "lazy";
+    cover.insertBefore(img, cover.firstChild);           // الشارة تظل فوق الصورة
+  }
+
   function drawThumb(cover, url) {
     ensurePdfJs(function () {
-      if (!window.pdfjsLib) return;
+      if (!window.pdfjsLib) { cover.classList.remove("is-loading"); return; }
       var task = pdfjsLib.getDocument({ url: url });
       task.promise.then(function (pdf) {
         return pdf.getPage(1);
       }).then(function (page) {
         var base = page.getViewport({ scale: 1 });
-        var scale = Math.min(2, 520 / base.width);        // عرض هدف ~520px
+        var scale = Math.min(1.6, 460 / base.width);      // عرض هدف ~460px (أسرع)
         var vp = page.getViewport({ scale: scale });
         var canvas = document.createElement("canvas");
         canvas.width = Math.ceil(vp.width);
@@ -470,16 +497,11 @@
         var ctx = canvas.getContext("2d");
         ctx.fillStyle = "#ffffff"; ctx.fillRect(0, 0, canvas.width, canvas.height);
         return page.render({ canvasContext: ctx, viewport: vp }).promise.then(function () {
-          var data = canvas.toDataURL("image/jpeg", 0.82);
-          THUMBS[url] = data;
-          var svgEl = cover.querySelector("svg");
-          if (svgEl) svgEl.remove();
-          cover.classList.remove("is-placeholder");
-          var img = new Image();
-          img.src = data; img.alt = ""; img.loading = "lazy";
-          cover.insertBefore(img, cover.firstChild);       // الشارة تظل فوق الصورة
+          var data = canvas.toDataURL("image/jpeg", 0.8);
+          lsSet(url, data);                                // تخزين دائم
+          applyThumb(cover, url, data);
         });
-      }).catch(function () { /* PDF غير قابل للمعاينة: يظل الشكل الافتراضي */ });
+      }).catch(function () { cover.classList.remove("is-loading"); });   // يظل الشكل الافتراضي
     });
   }
 
@@ -490,12 +512,14 @@
     var cover = o.cover || "";              // صورة غلاف يدوية لها الأولوية
     var cd = countdownOf(o, st);
 
-    // ترتيب الغلاف: صورة يدوية ← معاينة أول صفحة PDF (مخزّنة) ← أول صفحة PDF تُرسم لاحقًا ← شكل افتراضي
+    // ترتيب الغلاف: صورة يدوية ← معاينة مخزّنة (جلسة/متصفح، فورية) ← تُرسم لاحقًا ← شكل افتراضي
+    var cached = pdf ? (THUMBS[pdf] || lsGet(pdf)) : "";
     var coverHtml;
     if (cover) {
       coverHtml = '<div class="offer-cover"><img src="' + esc(cover) + '" alt="" loading="lazy"></div>';
-    } else if (pdf && THUMBS[pdf]) {
-      coverHtml = '<div class="offer-cover"><img src="' + esc(THUMBS[pdf]) + '" alt="" loading="lazy"></div>';
+    } else if (cached) {
+      if (!THUMBS[pdf]) THUMBS[pdf] = cached;
+      coverHtml = '<div class="offer-cover"><img src="' + esc(cached) + '" alt="" loading="lazy"></div>';
     } else if (pdf) {
       coverHtml = '<div class="offer-cover is-placeholder" data-thumb="' + esc(pdf) + '">' + svg(ICONS.file) + "</div>";
     } else {
