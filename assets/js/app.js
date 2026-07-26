@@ -25,6 +25,7 @@
       "branch.title": "معلومات الفرع", "branch.sub": "العنوان ومواعيد العمل ووسائل التواصل.",
       "branch.hours": "مواعيد العمل", "branch.whatsapp": "واتساب", "branch.directions": "الاتجاهات", "branch.share": "مشاركة الصفحة",
       "modal.download": "تحميل", "modal.newtab": "فتح في تبويب",
+      "modal.loading": "جاري تحميل العرض…", "modal.failed": "تعذّر عرض الملف. يمكنك تحميله:",
       "offer.view": "عرض العرض", "offer.download": "تحميل",
       "badge.active": "ساري", "badge.upcoming": "قريبًا", "badge.expired": "منتهي",
       "date.from": "من", "date.to": "إلى", "date.until": "حتى",
@@ -49,6 +50,7 @@
       "branch.title": "Branch information", "branch.sub": "Address, opening hours and contact details.",
       "branch.hours": "Opening hours", "branch.whatsapp": "WhatsApp", "branch.directions": "Directions", "branch.share": "Share page",
       "modal.download": "Download", "modal.newtab": "Open in new tab",
+      "modal.loading": "Loading offer…", "modal.failed": "Couldn't display the file. You can download it:",
       "offer.view": "View offer", "offer.download": "Download",
       "badge.active": "Active", "badge.upcoming": "Soon", "badge.expired": "Ended",
       "date.from": "From", "date.to": "to", "date.until": "Until",
@@ -558,7 +560,8 @@
   }
 
   /* -------------------------------- PDF modal ------------------------------ */
-  var modal = null;
+  var modal = null, pdfDoc = null, pageObserver = null;
+
   function openPdf(url, title) {
     url = encUrl(url);
     modal = $("#pdfModal");
@@ -566,17 +569,67 @@
     $("#pdfDownload").href = url;
     $("#pdfOpenNew").href = url;
 
-    // Mobile browsers rarely render PDFs in an iframe — open directly instead.
-    if (/Android|iPhone|iPad|iPod/i.test(navigator.userAgent)) { window.open(url, "_blank", "noopener"); return; }
-
-    $("#pdfFrame").src = url;
+    var host = $("#pdfPages");
+    host.innerHTML = '<div class="pdf-loading"><div class="pdf-page-spin"></div><span>' + esc(t("modal.loading")) + "</span></div>";
     modal.hidden = false;
     document.body.style.overflow = "hidden";
+
+    // يعرض صفحات الـ PDF كصور بالتدريج (صفحة صفحة) بدل تحميل الملف كله دفعة واحدة
+    ensurePdfJs(function () {
+      if (!window.pdfjsLib) { host.innerHTML = pdfFallback(url); return; }
+      pdfjsLib.getDocument({ url: url }).promise.then(function (pdf) {
+        if (modal.hidden) { try { pdf.destroy(); } catch (e) {} return; }   // أُغلق قبل الجاهزية
+        pdfDoc = pdf;
+        return pdf.getPage(1).then(function (p1) {
+          var base = p1.getViewport({ scale: 1 });
+          host.innerHTML = "";
+          for (var i = 1; i <= pdf.numPages; i++) {
+            var d = document.createElement("div");
+            d.className = "pdf-page";
+            d.style.aspectRatio = base.width + " / " + base.height;
+            d.dataset.page = String(i);
+            d.innerHTML = '<div class="pdf-page-spin"></div>';
+            host.appendChild(d);
+          }
+          pageObserver = new IntersectionObserver(function (ents, obs) {
+            ents.forEach(function (en) { if (en.isIntersecting) { obs.unobserve(en.target); renderPdfPage(en.target); } });
+          }, { root: $(".modal-body"), rootMargin: "800px" });
+          $$(".pdf-page", host).forEach(function (p) { pageObserver.observe(p); });
+        });
+      }).catch(function () { host.innerHTML = pdfFallback(url); });
+    });
   }
+
+  function renderPdfPage(el) {
+    if (!pdfDoc) return;
+    var i = parseInt(el.dataset.page, 10);
+    pdfDoc.getPage(i).then(function (page) {
+      var base = page.getViewport({ scale: 1 });
+      var cssW = el.clientWidth || 900;
+      var dpr = Math.min(window.devicePixelRatio || 1, 2);
+      var scale = Math.min(2.2, (cssW * dpr) / base.width);
+      var vp = page.getViewport({ scale: scale });
+      var canvas = document.createElement("canvas");
+      canvas.width = Math.ceil(vp.width); canvas.height = Math.ceil(vp.height);
+      var ctx = canvas.getContext("2d");
+      return page.render({ canvasContext: ctx, viewport: vp }).promise.then(function () {
+        el.innerHTML = ""; el.appendChild(canvas);
+      });
+    }).catch(function () { el.innerHTML = ""; });
+  }
+
+  function pdfFallback(url) {
+    return '<div class="pdf-loading"><span>' + esc(t("modal.failed")) + '</span>' +
+      '<a class="btn btn-primary btn-sm" href="' + esc(url) + '" download target="_blank" rel="noopener">' +
+      esc(t("modal.download")) + "</a></div>";
+  }
+
   function closePdf() {
     if (!modal) return;
     modal.hidden = true;
-    $("#pdfFrame").src = "about:blank";
+    if (pageObserver) { pageObserver.disconnect(); pageObserver = null; }
+    if (pdfDoc) { try { pdfDoc.destroy(); } catch (e) {} pdfDoc = null; }
+    $("#pdfPages").innerHTML = "";
     document.body.style.overflow = "";
   }
 
