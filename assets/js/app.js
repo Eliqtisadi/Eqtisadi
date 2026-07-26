@@ -394,15 +394,14 @@
         maxZoom: 19, attribution: '&copy; OpenStreetMap'
       }).addTo(map);
 
-      var name = ((pick(site, "name") || "") + " " + (pick(site, "branch") || "")).trim() || "موقعنا";
+      // اللوجو الكامل عائم على الخريطة (بدون كتابة)
       var icon = L.divIcon({
-        html: '<img src="assets/img/favicon.svg" alt="">',
-        className: "map-logo-marker", iconSize: [48, 48], iconAnchor: [24, 24]
+        html: '<img src="' + esc(site.logo || "assets/img/logo.svg") + '" alt="">',
+        className: "map-logo-marker", iconSize: [150, 50], iconAnchor: [75, 25]
       });
       var dir = site.directions_url || ("https://www.google.com/maps/dir/?api=1&destination=" + lat + "," + lng);
       L.marker([lat, lng], { icon: icon })
         .addTo(map)
-        .bindTooltip(name, { permanent: true, direction: "top", offset: [0, -26], className: "map-label" })
         .on("click", function () { window.open(dir, "_blank", "noopener"); });
 
       setTimeout(function () { map.invalidateSize(); }, 250);
