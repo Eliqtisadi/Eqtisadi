@@ -1,0 +1,228 @@
+<!DOCTYPE html>
+<html lang="ar" dir="rtl">
+<head>
+<meta charset="utf-8">
+<meta name="viewport" content="width=device-width, initial-scale=1, viewport-fit=cover">
+<title>الاقتصادي — العروض</title>
+<meta name="description" content="أحدث العروض والخصومات، مواعيد العمل، وحسابات التواصل الاجتماعي.">
+<meta name="theme-color" content="#0E50FC">
+
+<meta property="og:type" content="website">
+<meta property="og:title" content="الاقتصادي — العروض">
+<meta property="og:description" content="قول و فعل — أحدث العروض والخصومات ومواعيد العمل.">
+<meta property="og:image" content="assets/img/og.svg">
+
+<link rel="icon" href="assets/img/favicon.svg" type="image/svg+xml">
+<link rel="manifest" href="manifest.webmanifest">
+<link rel="apple-touch-icon" href="assets/img/favicon.svg">
+
+<link rel="preconnect" href="https://fonts.googleapis.com">
+<link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
+<link href="https://fonts.googleapis.com/css2?family=Cairo:wght@400;600;700;900&family=Inter:wght@400;600;700;900&display=swap" rel="stylesheet">
+
+<link rel="stylesheet" href="assets/css/styles.css">
+</head>
+<body>
+
+<a class="skip-link" href="#offers" data-i18n="skip">تخطي إلى العروض</a>
+
+<header class="site-header" id="header">
+  <div class="wrap header-inner">
+    <a class="brand" href="#top">
+      <img class="brand-logo" id="brandLogo" src="assets/img/logo.svg" alt="">
+    </a>
+
+    <nav class="header-nav" aria-label="التنقل">
+      <a href="#top" class="is-active" data-i18n="nav.home">الرئيسية</a>
+      <a href="#offers" data-i18n="nav.offers">العروض</a>
+      <a href="#social" data-i18n="nav.social">تابعنا</a>
+      <a href="#branch" data-i18n="nav.branch">الفرع</a>
+    </nav>
+
+    <div class="header-actions">
+      <button class="lang-btn" id="langToggle" type="button" aria-label="Change language">
+        <svg viewBox="0 0 24 24" aria-hidden="true"><circle cx="12" cy="12" r="9"/><path d="M3 12h18M12 3c2.6 2.6 2.6 15.4 0 18M12 3c-2.6 2.6-2.6 15.4 0 18"/></svg>
+        <span id="langLabel">EN</span>
+      </button>
+      <a class="btn btn-primary btn-sm nav-contact" id="navContact" href="#branch">
+        <svg viewBox="0 0 24 24" aria-hidden="true"><path d="M5 4h4l2 5-2.5 1.5a12 12 0 005 5L15 13l5 2v4a1 1 0 01-1.1 1A16 16 0 014 5.1 1 1 0 015 4z"/></svg>
+        <span data-i18n="nav.contact">تواصل معنا</span>
+      </a>
+    </div>
+  </div>
+</header>
+
+<main id="top">
+
+  <!-- ===== Hero ===== -->
+  <section class="hero">
+    <div class="wrap">
+      <div class="hero-card">
+        <div class="hero-inner">
+          <span class="hero-eyebrow">
+            <span class="dot"></span>
+            <span data-i18n="hero.badge">كل ما تحتاجه في مكان واحد</span>
+          </span>
+
+          <h1 class="hero-title" data-i18n="hero.title">أحدث العروض والخصومات في متناول يدك</h1>
+          <p class="hero-sub" data-bind="tagline"></p>
+
+          <div class="hero-cards">
+            <a class="hero-choice hero-choice-accent" href="#offers">
+              <span class="hero-choice-ico">
+                <svg viewBox="0 0 24 24" aria-hidden="true"><path d="M4 7h16v12H4z"/><path d="M4 7l2-3h12l2 3"/><path d="M9 11h6"/></svg>
+              </span>
+              <span class="hero-choice-body">
+                <span class="hero-choice-titlerow">
+                  <b data-i18n="hero.card.offers">العروض والخصومات</b>
+                  <span class="hero-choice-badge" id="heroOffersCount" hidden></span>
+                </span>
+                <span data-i18n="hero.card.offersSub">تصفّح عروض الأسبوع وحمّل ملفات الـ PDF</span>
+              </span>
+              <span class="hero-choice-arrow" aria-hidden="true">
+                <svg viewBox="0 0 24 24"><path d="M15 6l-6 6 6 6"/></svg>
+              </span>
+            </a>
+
+            <a class="hero-choice" href="#branch">
+              <span class="hero-choice-ico">
+                <svg viewBox="0 0 24 24" aria-hidden="true"><path d="M12 21s7-6.3 7-11a7 7 0 10-14 0c0 4.7 7 11 7 11z"/><circle cx="12" cy="10" r="2.5"/></svg>
+              </span>
+              <span class="hero-choice-body">
+                <b data-i18n="hero.card.branch">الفرع والتواصل</b>
+                <span data-i18n="hero.card.branchSub">العنوان، مواعيد العمل، والاتجاهات</span>
+              </span>
+              <span class="hero-choice-arrow" aria-hidden="true">
+                <svg viewBox="0 0 24 24"><path d="M15 6l-6 6 6 6"/></svg>
+              </span>
+            </a>
+          </div>
+        </div>
+
+        <div class="hero-visual" aria-hidden="true">
+          <div class="hero-emblem">
+            <img src="assets/img/logo-mark.svg" alt="">
+          </div>
+        </div>
+      </div>
+    </div>
+  </section>
+
+  <!-- ===== Offers ===== -->
+  <section class="section" id="offers">
+    <div class="wrap">
+      <div class="section-head">
+        <div>
+          <h2 data-i18n="offers.title">العروض</h2>
+          <p class="muted" data-i18n="offers.sub">اضغط على أي عرض لعرض ملف الـ PDF أو تحميله.</p>
+        </div>
+        <div class="chips" role="tablist" aria-label="تصفية العروض">
+          <button class="chip is-active" data-filter="active" role="tab" data-i18n="filter.active">السارية</button>
+          <button class="chip" data-filter="upcoming" role="tab" data-i18n="filter.upcoming">القادمة</button>
+          <button class="chip" data-filter="expired" role="tab" data-i18n="filter.expired">المنتهية</button>
+          <button class="chip" data-filter="all" role="tab" data-i18n="filter.all">الكل</button>
+        </div>
+      </div>
+
+      <div class="offers-grid" id="offersGrid" aria-live="polite">
+        <div class="skeleton"></div><div class="skeleton"></div><div class="skeleton"></div>
+      </div>
+
+      <div class="empty" id="offersEmpty" hidden>
+        <svg viewBox="0 0 24 24" aria-hidden="true"><path d="M6 3h9l5 5v13H6z"/><path d="M15 3v5h5"/><path d="M9 13h6M9 17h4"/></svg>
+        <p data-i18n="offers.empty">لا توجد عروض في هذا القسم حاليًا.</p>
+      </div>
+    </div>
+  </section>
+
+  <!-- ===== Social ===== -->
+  <section class="section section-alt" id="social">
+    <div class="wrap">
+      <div class="section-head">
+        <div>
+          <h2 data-i18n="social.title">تابعنا على مواقع التواصل</h2>
+          <p class="muted" data-i18n="social.sub">أول من يعرف بالعروض والخصومات الجديدة.</p>
+        </div>
+      </div>
+      <div class="social-grid" id="socialGrid"></div>
+    </div>
+  </section>
+
+  <!-- ===== Branch info ===== -->
+  <section class="section" id="branch">
+    <div class="wrap">
+      <div class="section-head">
+        <div>
+          <h2 data-i18n="branch.title">معلومات الفرع</h2>
+          <p class="muted" data-i18n="branch.sub">العنوان ومواعيد العمل ووسائل التواصل.</p>
+        </div>
+      </div>
+
+      <div class="branch-grid">
+        <div class="card info-card">
+          <ul class="info-list" id="infoList"></ul>
+          <div class="info-actions">
+            <a class="btn btn-primary btn-sm" id="infoDirections" href="#" target="_blank" rel="noopener" hidden>
+              <svg viewBox="0 0 24 24" aria-hidden="true"><path d="M12 21s7-6.3 7-11a7 7 0 10-14 0c0 4.7 7 11 7 11z"/><circle cx="12" cy="10" r="2.5"/></svg>
+              <span data-i18n="branch.directions">الاتجاهات</span>
+            </a>
+            <a class="btn btn-ghost btn-sm" id="infoWhatsapp" href="#" target="_blank" rel="noopener" hidden>
+              <svg viewBox="0 0 24 24" aria-hidden="true"><path d="M20 12a8 8 0 01-11.9 7L4 20l1.1-3.9A8 8 0 1120 12z"/><path d="M9 9.5c0 3 2.5 5.5 5.5 5.5l1-1.6-2-1-.8 1a5 5 0 01-2.1-2.1l1-.8-1-2z"/></svg>
+              <span data-i18n="branch.whatsapp">واتساب</span>
+            </a>
+            <a class="btn btn-ghost btn-sm" id="infoShare" href="#">
+              <svg viewBox="0 0 24 24" aria-hidden="true"><circle cx="18" cy="5" r="2.5"/><circle cx="6" cy="12" r="2.5"/><circle cx="18" cy="19" r="2.5"/><path d="M8.2 10.8l7.6-4.1M8.2 13.2l7.6 4.1"/></svg>
+              <span data-i18n="branch.share">مشاركة الصفحة</span>
+            </a>
+          </div>
+        </div>
+
+        <div class="card hours-card">
+          <h3 data-i18n="branch.hours">مواعيد العمل</h3>
+          <ul class="hours-list" id="hoursList"></ul>
+          <p class="open-state" id="openState" hidden></p>
+        </div>
+
+        <div class="card map-card" id="mapCard" hidden>
+          <div class="map-frame" id="mapFrame"></div>
+        </div>
+      </div>
+    </div>
+  </section>
+</main>
+
+<footer class="site-footer">
+  <div class="wrap footer-inner">
+    <div class="footer-brand">
+      <img src="assets/img/logo.svg" alt="" aria-hidden="true">
+      <span class="muted" data-bind="branchName"></span>
+    </div>
+    <div class="footer-links">
+      <span class="muted" id="footerYear"></span>
+    </div>
+  </div>
+</footer>
+
+<!-- ===== PDF viewer modal ===== -->
+<div class="modal" id="pdfModal" hidden>
+  <div class="modal-backdrop" data-close></div>
+  <div class="modal-box" role="dialog" aria-modal="true" aria-labelledby="pdfModalTitle">
+    <div class="modal-head">
+      <h3 id="pdfModalTitle">—</h3>
+      <div class="modal-head-actions">
+        <a class="btn btn-ghost btn-sm" id="pdfOpenNew" href="#" target="_blank" rel="noopener" data-i18n="modal.newtab">فتح في تبويب</a>
+        <a class="btn btn-primary btn-sm" id="pdfDownload" href="#" download data-i18n="modal.download">تحميل</a>
+        <button class="icon-btn" data-close type="button" aria-label="إغلاق">
+          <svg viewBox="0 0 24 24" aria-hidden="true"><path d="M6 6l12 12M18 6L6 18"/></svg>
+        </button>
+      </div>
+    </div>
+    <div class="modal-body"><iframe id="pdfFrame" title="PDF" src="about:blank"></iframe></div>
+  </div>
+</div>
+
+<div class="toast" id="toast" hidden></div>
+
+<script src="assets/js/app.js"></script>
+</body>
+</html>

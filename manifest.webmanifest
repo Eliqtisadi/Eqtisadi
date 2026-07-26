@@ -1,0 +1,14 @@
+{
+  "name": "الاقتصادي — العروض",
+  "short_name": "الاقتصادي",
+  "start_url": "./index.html",
+  "scope": "./",
+  "display": "standalone",
+  "background_color": "#FBF5EA",
+  "theme_color": "#0E50FC",
+  "lang": "ar",
+  "dir": "rtl",
+  "icons": [
+    { "src": "assets/img/favicon.svg", "sizes": "any", "type": "image/svg+xml", "purpose": "any" }
+  ]
+}

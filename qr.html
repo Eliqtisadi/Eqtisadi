@@ -1,0 +1,257 @@
+<!DOCTYPE html>
+<html lang="ar" dir="rtl">
+<head>
+<meta charset="utf-8">
+<meta name="viewport" content="width=device-width, initial-scale=1">
+<meta name="robots" content="noindex">
+<title>كود QR للفرع</title>
+<link rel="icon" href="assets/img/favicon.svg" type="image/svg+xml">
+<link rel="preconnect" href="https://fonts.googleapis.com">
+<link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
+<link href="https://fonts.googleapis.com/css2?family=Cairo:wght@400;600;700;900&display=swap" rel="stylesheet">
+<link rel="stylesheet" href="assets/css/styles.css">
+<style>
+  .qr-layout{display:grid;gap:24px;grid-template-columns:minmax(280px,380px) 1fr;align-items:start}
+  @media (max-width:860px){.qr-layout{grid-template-columns:1fr}}
+  .field{display:flex;flex-direction:column;gap:6px;margin-bottom:16px}
+  .field label{font-size:13.5px;font-weight:700;color:var(--text-2)}
+  .field input[type=text],.field input[type=url],.field select{
+    padding:11px 14px;border:1px solid var(--line);border-radius:12px;
+    background:var(--surface);color:var(--text);font:inherit;font-size:14.5px;
+  }
+  .field input:focus,.field select:focus{outline:2px solid var(--brand);outline-offset:1px;border-color:var(--brand)}
+  .field-row{display:flex;gap:12px}
+  .field-row .field{flex:1}
+  .check{display:flex;align-items:center;gap:9px;font-size:14px;margin-bottom:16px;cursor:pointer}
+  .check input{width:18px;height:18px;accent-color:var(--brand)}
+
+  /* ---- printable poster ---- */
+  .poster{
+    background:#fff;color:#111;border-radius:var(--radius);border:1px solid var(--line);
+    padding:38px 30px;text-align:center;box-shadow:var(--shadow);
+    display:flex;flex-direction:column;align-items:center;gap:16px;
+  }
+  .poster-logo{width:auto;height:64px}
+  .poster-branch{font-size:18px;font-weight:800;color:#333}
+  .poster-cta{font-size:20px;font-weight:800;color:#111}
+  .poster-sub{font-size:14px;color:#555;max-width:36ch}
+  .qr-box{position:relative;padding:14px;background:#fff;border-radius:16px;border:1px solid #e6e6e6}
+  .qr-box canvas{display:block;width:min(74vw,300px);height:auto;image-rendering:pixelated}
+  .qr-overlay{
+    position:absolute;top:50%;left:50%;transform:translate(-50%,-50%);
+    width:22%;height:22%;border-radius:12px;background:#fff;padding:5px;box-shadow:0 0 0 4px #fff;
+  }
+  .qr-overlay img{width:100%;height:100%;border-radius:8px;display:block}
+  .poster-url{font-size:12.5px;color:#777;direction:ltr;word-break:break-all}
+  .warn{padding:14px 16px;border-radius:12px;background:#fef3c7;color:#7c2d12;font-size:14px;margin-bottom:16px}
+
+  @media print{
+    @page{margin:14mm}
+    body{background:#fff}
+    .site-header,.no-print,.section-head,.site-footer{display:none !important}
+    .section{padding:0}
+    .qr-layout{display:block}
+    .poster{border:0;box-shadow:none;padding:0}
+    .qr-box canvas{width:78mm}
+  }
+</style>
+</head>
+<body>
+
+<header class="site-header no-print">
+  <div class="wrap header-inner">
+    <a class="brand" href="index.html">
+      <img class="brand-logo" src="assets/img/logo.svg" alt="">
+      <span class="brand-text"><strong class="brand-name" id="hdrName">—</strong><span class="brand-branch">مولّد كود QR</span></span>
+    </a>
+    <a class="btn btn-ghost btn-sm" href="index.html" style="margin-inline-start:auto">رجوع للموقع</a>
+  </div>
+</header>
+
+<section class="section">
+  <div class="wrap">
+    <div class="section-head no-print">
+      <div>
+        <h2>كود QR للفرع</h2>
+        <p class="muted">اطبع هذا الكود وضعه عند الكاشير أو على واجهة الفرع — العميل يمسحه فيفتح صفحة العروض.</p>
+      </div>
+    </div>
+
+    <div class="qr-layout">
+      <!-- controls -->
+      <div class="card no-print">
+        <div class="warn" id="cdnWarn" hidden>
+          تعذّر تحميل مكتبة توليد الكود (تحتاج اتصالًا بالإنترنت أول مرة). حدّث الصفحة بعد الاتصال.
+        </div>
+
+        <div class="field">
+          <label for="qUrl">رابط الصفحة</label>
+          <input type="url" id="qUrl" dir="ltr" placeholder="https://your-site.netlify.app">
+        </div>
+
+        <div class="field">
+          <label for="qCta">الجملة الرئيسية</label>
+          <input type="text" id="qCta" value="امسح الكود لمشاهدة العروض">
+        </div>
+
+        <div class="field">
+          <label for="qSub">جملة توضيحية</label>
+          <input type="text" id="qSub" value="عروض الأسبوع، مواعيد العمل، وحساباتنا على مواقع التواصل">
+        </div>
+
+        <div class="field-row">
+          <div class="field">
+            <label for="qEc">مستوى تصحيح الخطأ</label>
+            <select id="qEc">
+              <option value="M">متوسط (M)</option>
+              <option value="Q">عالي (Q)</option>
+              <option value="H" selected>الأعلى (H)</option>
+            </select>
+          </div>
+          <div class="field">
+            <label for="qSize">حجم التحميل (بكسل)</label>
+            <select id="qSize">
+              <option value="512">512</option>
+              <option value="1024" selected>1024</option>
+              <option value="2048">2048</option>
+            </select>
+          </div>
+        </div>
+
+        <label class="check"><input type="checkbox" id="qLogo"> إظهار الشعار في منتصف الكود</label>
+        <label class="check"><input type="checkbox" id="qDark" checked> استخدام لون الهوية بدل الأسود</label>
+
+        <div style="display:flex;gap:8px;flex-wrap:wrap">
+          <button class="btn btn-primary btn-sm" id="btnPng" type="button">تحميل PNG</button>
+          <button class="btn btn-ghost btn-sm" id="btnSvg" type="button">تحميل SVG</button>
+          <button class="btn btn-ghost btn-sm" id="btnPrint" type="button">طباعة الملصق</button>
+        </div>
+      </div>
+
+      <!-- poster preview -->
+      <div class="poster" id="poster">
+        <img class="poster-logo" id="pLogo" src="assets/img/logo.svg" alt="">
+        <div class="poster-branch" id="pBranch"></div>
+        <div class="qr-box" id="qrBox">
+          <canvas id="qrCanvas" width="300" height="300"></canvas>
+          <span class="qr-overlay" id="qrOverlay" hidden><img src="assets/img/favicon.svg" alt=""></span>
+        </div>
+        <div class="poster-cta" id="pCta">امسح الكود لمشاهدة العروض</div>
+        <div class="poster-sub" id="pSub"></div>
+        <div class="poster-url" id="pUrl"></div>
+      </div>
+    </div>
+  </div>
+</section>
+
+<script src="https://unpkg.com/qrcode-generator@1.4.4/qrcode.js"></script>
+<script>
+(function () {
+  "use strict";
+  var $ = function (s) { return document.querySelector(s); };
+  var brand = "#0f766e";
+  var modules = null;
+
+  function defaultUrl() {
+    var u = new URL("index.html", location.href).href;
+    return u.replace(/^file:.*$/, "https://your-site.netlify.app/");
+  }
+
+  /* ---------- build QR modules ---------- */
+  function build() {
+    if (typeof qrcode !== "function") { $("#cdnWarn").hidden = false; return; }
+    var text = $("#qUrl").value.trim() || defaultUrl();
+    var ec = $("#qEc").value;
+    var qr = qrcode(0, ec);
+    qr.addData(text);
+    qr.make();
+
+    var n = qr.getModuleCount();
+    modules = [];
+    for (var r = 0; r < n; r++) {
+      modules[r] = [];
+      for (var c = 0; c < n; c++) modules[r][c] = qr.isDark(r, c);
+    }
+    draw($("#qrCanvas"), 8, 4);
+    $("#qrOverlay").hidden = !$("#qLogo").checked;
+    $("#pUrl").textContent = text;
+  }
+
+  function color() { return $("#qDark").checked ? brand : "#000000"; }
+
+  function draw(canvas, cell, quiet) {
+    if (!modules) return;
+    var n = modules.length, size = (n + quiet * 2) * cell;
+    canvas.width = size; canvas.height = size;
+    var ctx = canvas.getContext("2d");
+    ctx.fillStyle = "#ffffff"; ctx.fillRect(0, 0, size, size);
+    ctx.fillStyle = color();
+    for (var r = 0; r < n; r++) for (var c = 0; c < n; c++) {
+      if (modules[r][c]) ctx.fillRect((c + quiet) * cell, (r + quiet) * cell, cell, cell);
+    }
+  }
+
+  function svgString(cell, quiet) {
+    var n = modules.length, size = (n + quiet * 2) * cell, d = "";
+    for (var r = 0; r < n; r++) for (var c = 0; c < n; c++) {
+      if (modules[r][c]) d += "M" + ((c + quiet) * cell) + " " + ((r + quiet) * cell) + "h" + cell + "v" + cell + "h" + (-cell) + "z";
+    }
+    return '<svg xmlns="http://www.w3.org/2000/svg" width="' + size + '" height="' + size + '" viewBox="0 0 ' + size + ' ' + size + '">' +
+      '<rect width="' + size + '" height="' + size + '" fill="#ffffff"/><path fill="' + color() + '" d="' + d + '"/></svg>';
+  }
+
+  function download(href, name) {
+    var a = document.createElement("a");
+    a.href = href; a.download = name;
+    document.body.appendChild(a); a.click(); a.remove();
+  }
+
+  /* ---------- events ---------- */
+  ["qUrl", "qEc", "qDark"].forEach(function (id) {
+    $("#" + id).addEventListener("input", build);
+    $("#" + id).addEventListener("change", build);
+  });
+  $("#qLogo").addEventListener("change", function () { $("#qrOverlay").hidden = !this.checked; });
+  $("#qCta").addEventListener("input", function () { $("#pCta").textContent = this.value; });
+  $("#qSub").addEventListener("input", function () { $("#pSub").textContent = this.value; });
+
+  $("#btnPng").addEventListener("click", function () {
+    if (!modules) return;
+    var px = parseInt($("#qSize").value, 10);
+    var n = modules.length, quiet = 4;
+    var cell = Math.max(1, Math.floor(px / (n + quiet * 2)));
+    var tmp = document.createElement("canvas");
+    draw(tmp, cell, quiet);
+    download(tmp.toDataURL("image/png"), "qr-code.png");
+  });
+
+  $("#btnSvg").addEventListener("click", function () {
+    if (!modules) return;
+    var blob = new Blob([svgString(10, 4)], { type: "image/svg+xml" });
+    var url = URL.createObjectURL(blob);
+    download(url, "qr-code.svg");
+    setTimeout(function () { URL.revokeObjectURL(url); }, 4000);
+  });
+
+  $("#btnPrint").addEventListener("click", function () { window.print(); });
+
+  /* ---------- load branch data for the poster ---------- */
+  fetch("content/site.json?v=" + Date.now(), { cache: "no-store" })
+    .then(function (r) { return r.json(); })
+    .then(function (s) {
+      brand = s.brand_color || brand;
+      document.documentElement.style.setProperty("--brand", brand);
+      $("#hdrName").textContent = s.branch_ar || s.branch_en || "";
+      $("#pBranch").textContent = s.branch_ar || s.branch_en || "";
+      if (s.logo) { $("#pLogo").src = s.logo; }
+      build();
+    })
+    .catch(build);
+
+  $("#qUrl").value = defaultUrl();
+  $("#pSub").textContent = $("#qSub").value;
+  build();
+})();
+</script>
+</body>
+</html>

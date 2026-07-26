@@ -1,0 +1,186 @@
+# =====================================================================
+#  لوحة التحكم (Decap CMS)
+#  ⚠️  غيّر السطر repo بالاسم الحقيقي لمستودعك على GitHub قبل النشر
+#      مثال:  repo: mohamed/market-site
+# =====================================================================
+
+backend:
+  name: github
+  repo: USERNAME/REPOSITORY      # <-- غيّر هذا السطر
+  branch: main
+  commit_messages:
+    create: 'إضافة {{collection}} "{{slug}}"'
+    update: 'تعديل {{collection}} "{{slug}}"'
+    delete: 'حذف {{collection}} "{{slug}}"'
+    uploadMedia: 'رفع ملف "{{path}}"'
+    deleteMedia: 'حذف ملف "{{path}}"'
+
+# مكان رفع ملفات الـ PDF وصور الأغلفة
+media_folder: "offers"
+public_folder: "/offers"
+
+publish_mode: simple
+
+collections:
+  # -------------------------------------------------------------------
+  #  العروض
+  # -------------------------------------------------------------------
+  - name: "offers"
+    label: "العروض"
+    files:
+      - name: "offers_list"
+        label: "قائمة العروض"
+        file: "content/offers.json"
+        description: "أضف عرضًا جديدًا، ارفع ملف PDF، وحدّد تاريخ البداية والنهاية."
+        fields:
+          - label: "العروض"
+            name: "offers"
+            widget: "list"
+            label_singular: "عرض"
+            summary: "{{fields.title_ar}}  ({{fields.start}} ← {{fields.end}})"
+            fields:
+              - { label: "العنوان (عربي)", name: "title_ar", widget: "string" }
+              - { label: "العنوان (إنجليزي)", name: "title_en", widget: "string", required: false }
+              - { label: "وصف مختصر (عربي)", name: "desc_ar", widget: "text", required: false }
+              - { label: "وصف مختصر (إنجليزي)", name: "desc_en", widget: "text", required: false }
+              - label: "تاريخ البداية"
+                name: "start"
+                widget: "datetime"
+                date_format: "YYYY-MM-DD"
+                time_format: false
+                format: "YYYY-MM-DD"
+                picker_utc: true
+                required: false
+              - label: "تاريخ النهاية"
+                name: "end"
+                widget: "datetime"
+                date_format: "YYYY-MM-DD"
+                time_format: false
+                format: "YYYY-MM-DD"
+                picker_utc: true
+                required: false
+              - label: "ملف العرض (PDF)"
+                name: "pdf"
+                widget: "file"
+                required: false
+                hint: "ارفع ملف PDF — سيظهر للزائر بزر عرض وزر تحميل."
+              - label: "صورة الغلاف (اختياري)"
+                name: "cover"
+                widget: "image"
+                required: false
+                hint: "لو تُركت فارغة، يستخدم الموقع أول صفحة من ملف الـ PDF تلقائيًا كصورة للعرض. ارفع صورة هنا فقط لو تريد غلافًا مختلفًا (أو للكتالوجات الكبيرة جدًا)."
+              - { label: "تثبيت في الأعلى", name: "pinned", widget: "boolean", default: false, required: false }
+
+  # -------------------------------------------------------------------
+  #  إعدادات الموقع
+  # -------------------------------------------------------------------
+  - name: "settings"
+    label: "إعدادات الموقع"
+    files:
+      - name: "site"
+        label: "بيانات الفرع والمظهر"
+        file: "content/site.json"
+        fields:
+          - { label: "اسم السوق (عربي)", name: "name_ar", widget: "string" }
+          - { label: "اسم السوق (إنجليزي)", name: "name_en", widget: "string", required: false }
+          - { label: "اسم الفرع (عربي)", name: "branch_ar", widget: "string", required: false }
+          - { label: "اسم الفرع (إنجليزي)", name: "branch_en", widget: "string", required: false }
+          - { label: "جملة تعريفية (عربي)", name: "tagline_ar", widget: "text", required: false }
+          - { label: "جملة تعريفية (إنجليزي)", name: "tagline_en", widget: "text", required: false }
+          - { label: "اللون الأساسي (أزرق اللوجو)", name: "brand_color", widget: "color", default: "#0E50FC", required: false }
+          - { label: "لون التمييز (برتقالي اللوجو)", name: "accent_color", widget: "color", default: "#FA2F00", required: false }
+          - { label: "الشعار", name: "logo", widget: "image", required: false }
+          - { label: "رقم الهاتف", name: "phone", widget: "string", required: false }
+          - { label: "رقم الواتساب", name: "whatsapp", widget: "string", required: false, hint: "بصيغة دولية، مثال: +201000000000" }
+          - { label: "البريد الإلكتروني", name: "email", widget: "string", required: false }
+          - { label: "العنوان (عربي)", name: "address_ar", widget: "text", required: false }
+          - { label: "العنوان (إنجليزي)", name: "address_en", widget: "text", required: false }
+          - { label: "رابط الاتجاهات (خرائط جوجل)", name: "directions_url", widget: "string", required: false }
+          - label: "رابط تضمين الخريطة"
+            name: "map_embed_url"
+            widget: "string"
+            required: false
+            hint: "من خرائط جوجل: مشاركة ← تضمين خريطة ← انسخ الرابط الموجود داخل src أو انسخ كود iframe كاملًا."
+          - label: "مواعيد العمل"
+            name: "hours"
+            widget: "list"
+            required: false
+            summary: "{{fields.day_ar}} — {{fields.open}} / {{fields.close}}"
+            fields:
+              - label: "اليوم"
+                name: "weekday"
+                widget: "select"
+                options:
+                  - { label: "السبت", value: 6 }
+                  - { label: "الأحد", value: 0 }
+                  - { label: "الاثنين", value: 1 }
+                  - { label: "الثلاثاء", value: 2 }
+                  - { label: "الأربعاء", value: 3 }
+                  - { label: "الخميس", value: 4 }
+                  - { label: "الجمعة", value: 5 }
+              - { label: "اسم اليوم (عربي)", name: "day_ar", widget: "string" }
+              - { label: "اسم اليوم (إنجليزي)", name: "day_en", widget: "string", required: false }
+              - { label: "من", name: "open", widget: "string", required: false, hint: "بصيغة 24 ساعة، مثال 09:00" }
+              - { label: "إلى", name: "close", widget: "string", required: false, hint: "بصيغة 24 ساعة، مثال 23:30" }
+              - { label: "مغلق", name: "closed", widget: "boolean", default: false, required: false }
+          - label: "حسابات التواصل الاجتماعي"
+            name: "socials"
+            widget: "list"
+            required: false
+            summary: "{{fields.platform}} — {{fields.handle}}"
+            fields:
+              - label: "المنصة"
+                name: "platform"
+                widget: "select"
+                options:
+                  - { label: "فيسبوك", value: "facebook" }
+                  - { label: "إنستجرام", value: "instagram" }
+                  - { label: "واتساب", value: "whatsapp" }
+                  - { label: "تيك توك", value: "tiktok" }
+                  - { label: "يوتيوب", value: "youtube" }
+                  - { label: "إكس (تويتر)", value: "x" }
+                  - { label: "تليجرام", value: "telegram" }
+                  - { label: "سناب شات", value: "snapchat" }
+                  - { label: "لينكد إن", value: "linkedin" }
+                  - { label: "خرائط جوجل", value: "maps" }
+                  - { label: "موقع إلكتروني", value: "website" }
+              - { label: "الرابط", name: "url", widget: "string" }
+              - { label: "الاسم الظاهر", name: "handle", widget: "string", required: false, hint: "مثال: @market_maadi" }
+              - { label: "تسمية مخصصة (عربي)", name: "label_ar", widget: "string", required: false }
+              - { label: "تسمية مخصصة (إنجليزي)", name: "label_en", widget: "string", required: false }
+
+          # ---------------------------------------------------------------
+          #  نصوص الصفحة — تحكّم كامل في كل عنوان وجملة على الموقع
+          # ---------------------------------------------------------------
+          - label: "نصوص الصفحة"
+            name: "texts"
+            widget: "object"
+            collapsed: true
+            hint: "تحكّم في كل النصوص الظاهرة على الصفحة. اترك أي حقل فارغًا ليعود للنص الافتراضي."
+            fields:
+              - { label: "الهيرو — الجملة العلوية (عربي)", name: "hero_badge_ar", widget: "string", required: false }
+              - { label: "Hero — top line (EN)", name: "hero_badge_en", widget: "string", required: false }
+              - { label: "الهيرو — العنوان الرئيسي (عربي)", name: "hero_title_ar", widget: "text", required: false }
+              - { label: "Hero — main title (EN)", name: "hero_title_en", widget: "text", required: false }
+              - { label: "بطاقة العروض — العنوان (عربي)", name: "hero_offers_title_ar", widget: "string", required: false }
+              - { label: "Offers card — title (EN)", name: "hero_offers_title_en", widget: "string", required: false }
+              - { label: "بطاقة العروض — الوصف (عربي)", name: "hero_offers_sub_ar", widget: "string", required: false }
+              - { label: "Offers card — subtitle (EN)", name: "hero_offers_sub_en", widget: "string", required: false }
+              - { label: "بطاقة الفرع — العنوان (عربي)", name: "hero_branch_title_ar", widget: "string", required: false }
+              - { label: "Branch card — title (EN)", name: "hero_branch_title_en", widget: "string", required: false }
+              - { label: "بطاقة الفرع — الوصف (عربي)", name: "hero_branch_sub_ar", widget: "string", required: false }
+              - { label: "Branch card — subtitle (EN)", name: "hero_branch_sub_en", widget: "string", required: false }
+              - { label: "قسم العروض — العنوان (عربي)", name: "sec_offers_title_ar", widget: "string", required: false }
+              - { label: "Offers section — title (EN)", name: "sec_offers_title_en", widget: "string", required: false }
+              - { label: "قسم العروض — الوصف (عربي)", name: "sec_offers_sub_ar", widget: "string", required: false }
+              - { label: "Offers section — subtitle (EN)", name: "sec_offers_sub_en", widget: "string", required: false }
+              - { label: "قسم التواصل — العنوان (عربي)", name: "sec_social_title_ar", widget: "string", required: false }
+              - { label: "Social section — title (EN)", name: "sec_social_title_en", widget: "string", required: false }
+              - { label: "قسم التواصل — الوصف (عربي)", name: "sec_social_sub_ar", widget: "string", required: false }
+              - { label: "Social section — subtitle (EN)", name: "sec_social_sub_en", widget: "string", required: false }
+              - { label: "قسم الفرع — العنوان (عربي)", name: "sec_branch_title_ar", widget: "string", required: false }
+              - { label: "Branch section — title (EN)", name: "sec_branch_title_en", widget: "string", required: false }
+              - { label: "قسم الفرع — الوصف (عربي)", name: "sec_branch_sub_ar", widget: "string", required: false }
+              - { label: "Branch section — subtitle (EN)", name: "sec_branch_sub_en", widget: "string", required: false }
+              - { label: "عنوان مواعيد العمل (عربي)", name: "sec_hours_title_ar", widget: "string", required: false }
+              - { label: "Opening hours title (EN)", name: "sec_hours_title_en", widget: "string", required: false }

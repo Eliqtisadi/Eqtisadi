@@ -1,0 +1,69 @@
+{
+  "name_ar": "الاقتصادي",
+  "name_en": "Al Eqtisadi",
+  "branch_ar": "فرع القرين",
+  "branch_en": "Al-Qurain Branch",
+  "tagline_ar": "قول و فعل — أحدث العروض والخصومات، ومواعيد العمل، وكل حسابات التواصل في مكان واحد.",
+  "tagline_en": "Say it, do it — latest offers, opening hours and all our social accounts in one place.",
+
+  "brand_color": "#0E50FC",
+  "accent_color": "#FA2F00",
+  "logo": "assets/img/logo.svg",
+
+  "phone": "+965 0000 0000",
+  "whatsapp": "+965 0000 0000",
+  "email": "",
+
+  "address_ar": "أسواق القرين، الكويت",
+  "address_en": "Al-Qurain Markets, Kuwait",
+
+  "directions_url": "https://www.google.com/maps/dir/?api=1&destination=29.2004874,48.0454125",
+  "map_embed_url": "https://www.google.com/maps?q=29.2004874,48.0454125&z=16&output=embed",
+
+  "hours": [
+    { "weekday": 6, "day_ar": "السبت",    "day_en": "Saturday",  "open": "08:00", "close": "01:00", "closed": false },
+    { "weekday": 0, "day_ar": "الأحد",    "day_en": "Sunday",    "open": "08:00", "close": "01:00", "closed": false },
+    { "weekday": 1, "day_ar": "الاثنين",  "day_en": "Monday",    "open": "08:00", "close": "01:00", "closed": false },
+    { "weekday": 2, "day_ar": "الثلاثاء", "day_en": "Tuesday",   "open": "08:00", "close": "01:00", "closed": false },
+    { "weekday": 3, "day_ar": "الأربعاء", "day_en": "Wednesday", "open": "08:00", "close": "01:00", "closed": false },
+    { "weekday": 4, "day_ar": "الخميس",   "day_en": "Thursday",  "open": "08:00", "close": "02:00", "closed": false },
+    { "weekday": 5, "day_ar": "الجمعة",   "day_en": "Friday",    "open": "13:00", "close": "02:00", "closed": false }
+  ],
+
+  "socials": [
+    { "platform": "instagram", "url": "https://instagram.com/", "handle": "@aleqtisadi" },
+    { "platform": "whatsapp",  "url": "https://wa.me/9650000000", "handle": "+965 0000 0000" },
+    { "platform": "facebook",  "url": "https://facebook.com/",  "handle": "@aleqtisadi" },
+    { "platform": "tiktok",    "url": "https://tiktok.com/",    "handle": "@aleqtisadi" },
+    { "platform": "maps",      "url": "https://www.google.com/maps/search/?api=1&query=29.2004874,48.0454125", "handle": "Google Maps" }
+  ],
+
+  "texts": {
+    "hero_badge_ar": "كل ما تحتاجه في مكان واحد",
+    "hero_badge_en": "Everything you need in one place",
+    "hero_title_ar": "أحدث العروض والخصومات في متناول يدك",
+    "hero_title_en": "The latest offers and deals within your reach",
+    "hero_offers_title_ar": "العروض والخصومات",
+    "hero_offers_title_en": "Offers & deals",
+    "hero_offers_sub_ar": "تصفّح عروض الأسبوع وحمّل ملفات الـ PDF",
+    "hero_offers_sub_en": "Browse this week's offers and download the PDFs",
+    "hero_branch_title_ar": "الفرع والتواصل",
+    "hero_branch_title_en": "Branch & contact",
+    "hero_branch_sub_ar": "العنوان، مواعيد العمل، والاتجاهات",
+    "hero_branch_sub_en": "Address, opening hours and directions",
+    "sec_offers_title_ar": "العروض",
+    "sec_offers_title_en": "Offers",
+    "sec_offers_sub_ar": "اضغط على أي عرض لعرض ملف الـ PDF أو تحميله.",
+    "sec_offers_sub_en": "Tap any offer to view or download its PDF.",
+    "sec_social_title_ar": "تابعنا على مواقع التواصل",
+    "sec_social_title_en": "Follow us on social media",
+    "sec_social_sub_ar": "أول من يعرف بالعروض والخصومات الجديدة.",
+    "sec_social_sub_en": "Be the first to hear about new deals.",
+    "sec_branch_title_ar": "معلومات الفرع",
+    "sec_branch_title_en": "Branch information",
+    "sec_branch_sub_ar": "العنوان ومواعيد العمل ووسائل التواصل.",
+    "sec_branch_sub_en": "Address, opening hours and contact details.",
+    "sec_hours_title_ar": "مواعيد العمل",
+    "sec_hours_title_en": "Opening hours"
+  }
+}

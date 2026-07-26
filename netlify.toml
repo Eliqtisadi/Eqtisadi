@@ -1,0 +1,27 @@
+# موقع ثابت بدون خطوة بناء — Netlify ينشر محتوى المجلد كما هو
+[build]
+  publish = "."
+  command = ""
+
+# ملفات المحتوى يجب ألا تُخزَّن مؤقتًا حتى تظهر تعديلات لوحة التحكم فورًا
+[[headers]]
+  for = "/content/*"
+  [headers.values]
+    Cache-Control = "public, max-age=0, must-revalidate"
+
+[[headers]]
+  for = "/offers/*"
+  [headers.values]
+    Cache-Control = "public, max-age=300"
+
+[[headers]]
+  for = "/*"
+  [headers.values]
+    X-Content-Type-Options = "nosniff"
+    Referrer-Policy = "strict-origin-when-cross-origin"
+    X-Frame-Options = "SAMEORIGIN"
+
+[[headers]]
+  for = "/admin/*"
+  [headers.values]
+    X-Robots-Tag = "noindex"
