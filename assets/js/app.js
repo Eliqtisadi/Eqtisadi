@@ -415,7 +415,7 @@
   var THUMBS = {};
   var PDFJS_VER = "3.11.174";
   var LS_PREFIX = "thumb:v2:";
-  var MAX_AUTO_THUMB = 3 * 1024 * 1024;   // فوق 3 ميجا: لا تُولّد معاينة تلقائيًا كي يفتح الموقع فورًا
+  var MAX_AUTO_THUMB = 40 * 1024 * 1024;  // حد أمان أعلى فقط؛ الغلاف = أول صفحة دائمًا (كسول + مخزّن)
 
   function lsGet(url) {
     try { return localStorage.getItem(LS_PREFIX + url) || ""; } catch (e) { return ""; }
