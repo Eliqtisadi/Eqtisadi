@@ -12,17 +12,17 @@
   var I18N = {
     ar: {
       "skip": "تخطي إلى العروض",
-      "nav.home": "الرئيسية", "nav.offers": "العروض", "nav.social": "تابعنا", "nav.branch": "الفرع", "nav.contact": "تواصل معنا",
+      "nav.home": "الرئيسية", "nav.offers": "العروض", "nav.social": "تابعنا", "nav.branch": "زورنا", "nav.contact": "تواصل معنا",
       "hero.badge": "كل ما تحتاجه في مكان واحد",
       "hero.title": "أحدث العروض والخصومات في متناول يدك",
       "hero.card.offers": "العروض والخصومات", "hero.card.offersSub": "تصفّح عروض الأسبوع وحمّل ملفات الـ PDF",
-      "hero.card.branch": "الفرع والتواصل", "hero.card.branchSub": "العنوان، مواعيد العمل، والاتجاهات",
+      "hero.card.branch": "الموقع والتواصل", "hero.card.branchSub": "العنوان، مواعيد العمل، والاتجاهات",
       "hero.offersCount": "{n} ساري",
       "offers.title": "العروض", "offers.sub": "اضغط على أي عرض لعرض ملف الـ PDF أو تحميله.",
       "offers.empty": "لا توجد عروض في هذا القسم حاليًا.",
       "filter.active": "السارية", "filter.upcoming": "القادمة", "filter.expired": "المنتهية", "filter.all": "الكل",
       "social.title": "تابعنا على مواقع التواصل", "social.sub": "أول من يعرف بالعروض والخصومات الجديدة.",
-      "branch.title": "معلومات الفرع", "branch.sub": "العنوان ومواعيد العمل ووسائل التواصل.",
+      "branch.title": "الموقع والتواصل", "branch.sub": "العنوان ومواعيد العمل ووسائل التواصل.",
       "branch.hours": "مواعيد العمل", "branch.whatsapp": "واتساب", "branch.directions": "الاتجاهات", "branch.share": "مشاركة الصفحة",
       "modal.download": "تحميل", "modal.newtab": "فتح في تبويب",
       "modal.loading": "جاري تحميل العرض…", "modal.failed": "تعذّر عرض الملف. يمكنك تحميله:",
@@ -37,17 +37,17 @@
     },
     en: {
       "skip": "Skip to offers",
-      "nav.home": "Home", "nav.offers": "Offers", "nav.social": "Follow us", "nav.branch": "Branch", "nav.contact": "Contact us",
+      "nav.home": "Home", "nav.offers": "Offers", "nav.social": "Follow us", "nav.branch": "Visit us", "nav.contact": "Contact us",
       "hero.badge": "Everything you need in one place",
       "hero.title": "The latest offers and deals within your reach",
       "hero.card.offers": "Offers & deals", "hero.card.offersSub": "Browse this week's offers and download the PDFs",
-      "hero.card.branch": "Branch & contact", "hero.card.branchSub": "Address, opening hours and directions",
+      "hero.card.branch": "Location & contact", "hero.card.branchSub": "Address, opening hours and directions",
       "hero.offersCount": "{n} active",
       "offers.title": "Offers", "offers.sub": "Tap any offer to view or download its PDF.",
       "offers.empty": "No offers in this section right now.",
       "filter.active": "Active", "filter.upcoming": "Upcoming", "filter.expired": "Past", "filter.all": "All",
       "social.title": "Follow us on social media", "social.sub": "Be the first to hear about new deals.",
-      "branch.title": "Branch information", "branch.sub": "Address, opening hours and contact details.",
+      "branch.title": "Location & contact", "branch.sub": "Address, opening hours and contact details.",
       "branch.hours": "Opening hours", "branch.whatsapp": "WhatsApp", "branch.directions": "Directions", "branch.share": "Share page",
       "modal.download": "Download", "modal.newtab": "Open in new tab",
       "modal.loading": "Loading offer…", "modal.failed": "Couldn't display the file. You can download it:",
@@ -286,8 +286,6 @@
     if (address) rows.push({ ico: ICONS.address, label: t("info.address"), value: esc(address) });
     if (site.phone) rows.push({ ico: ICONS.phone, label: t("info.phone"), value: '<a href="' + telHref(site.phone) + '" dir="ltr">' + esc(site.phone) + "</a>" });
     if (site.email) rows.push({ ico: ICONS.email, label: t("info.email"), value: '<a href="mailto:' + esc(site.email) + '" dir="ltr">' + esc(site.email) + "</a>" });
-    var branch = pick(site, "branch");
-    if (branch) rows.push({ ico: ICONS.branch, label: t("info.branch"), value: esc(branch) });
 
     $("#infoList").innerHTML = rows.map(function (r) {
       return '<li><span class="ico">' + svg(r.ico) + "</span><span><b>" + esc(r.label) + "</b>" + r.value + "</span></li>";
@@ -359,7 +357,8 @@
       var fg = meta.fg ? ' style="color:' + meta.fg + '"' : "";
       return '<a class="social-card" href="' + esc(s.url) + '" target="_blank" rel="noopener" style="--sc:' + esc(color) + '">' +
         '<span class="social-glyph"' + fg + ">" + svg(meta.svg) + "</span>" +
-        '<span class="social-text"><b>' + esc(label) + "</b><span dir='ltr'>" + esc(handle) + "</span></span></a>";
+        '<span class="social-text"><b>' + esc(label) + "</b><span dir='ltr'>" + esc(handle) + "</span></span>" +
+        '<span class="social-arrow" aria-hidden="true">' + svg('<path d="M7 17L17 7"/><path d="M8 7h9v9"/>') + "</span></a>";
     }).join("");
   }
 
@@ -368,13 +367,46 @@
     catch (e) { return u; }
   }
 
+  var mapInited = false;
+  function ensureLeaflet(cb) {
+    if (window.L) { cb(); return; }
+    if (ensureLeaflet.q) { ensureLeaflet.q.push(cb); return; }
+    ensureLeaflet.q = [cb];
+    var s = document.createElement("script");
+    s.src = "https://unpkg.com/leaflet@1.9.4/dist/leaflet.js";
+    s.onload = function () { var q = ensureLeaflet.q; ensureLeaflet.q = null; q.forEach(function (f) { f(); }); };
+    s.onerror = function () { ensureLeaflet.q = null; };
+    document.head.appendChild(s);
+  }
+
   function renderMap() {
-    var raw = (site.map_embed_url || "").trim();
-    var m = raw.match(/src\s*=\s*["']([^"']+)["']/i); // accept a pasted full <iframe> too
-    var src = m ? m[1] : raw;
-    if (!/^https?:\/\//i.test(src)) { $("#mapCard").hidden = true; return; }
+    var lat = parseFloat(site.map_lat), lng = parseFloat(site.map_lng);
+    if (isNaN(lat) || isNaN(lng)) { $("#mapCard").hidden = true; return; }
     $("#mapCard").hidden = false;
-    $("#mapFrame").innerHTML = '<iframe src="' + esc(src) + '" loading="lazy" referrerpolicy="no-referrer-when-downgrade" title="map" allowfullscreen></iframe>';
+
+    // خريطة OpenStreetMap (Leaflet) بعلامة اللوجو ولافتة باسم المتجر — بأسلوب مشابه للمرجع
+    ensureLeaflet(function () {
+      if (!window.L || mapInited) { if (mapInited) return; $("#mapCard").hidden = true; return; }
+      mapInited = true;
+      var host = $("#mapFrame"); host.innerHTML = "";
+      var map = L.map(host, { scrollWheelZoom: false, zoomControl: true, attributionControl: true }).setView([lat, lng], 16);
+      L.tileLayer("https://{s}.tile.openstreetmap.org/{z}/{x}/{y}.png", {
+        maxZoom: 19, attribution: '&copy; OpenStreetMap'
+      }).addTo(map);
+
+      var name = ((pick(site, "name") || "") + " " + (pick(site, "branch") || "")).trim() || "موقعنا";
+      var icon = L.divIcon({
+        html: '<img src="assets/img/favicon.svg" alt="">',
+        className: "map-logo-marker", iconSize: [48, 48], iconAnchor: [24, 24]
+      });
+      var dir = site.directions_url || ("https://www.google.com/maps/dir/?api=1&destination=" + lat + "," + lng);
+      L.marker([lat, lng], { icon: icon })
+        .addTo(map)
+        .bindTooltip(name, { permanent: true, direction: "top", offset: [0, -26], className: "map-label" })
+        .on("click", function () { window.open(dir, "_blank", "noopener"); });
+
+      setTimeout(function () { map.invalidateSize(); }, 250);
+    });
   }
 
   function renderOffers() {
@@ -389,6 +421,15 @@
       var be = parseDate(b.o.end) || parseDate(b.o.start) || new Date(8640000000000000);
       return a.st === "expired" ? be - ae : ae - be;
     });
+
+    // إخفاء زر «المنتهية» لو مفيش عروض منتهية، والتحويل للسارية لو كان مختارًا
+    var expiredCount = decorated.filter(function (d) { return d.st === "expired"; }).length;
+    var expiredChip = $('.chip[data-filter="expired"]');
+    if (expiredChip) expiredChip.hidden = expiredCount === 0;
+    if (expiredCount === 0 && filter === "expired") {
+      filter = "active";
+      $$(".chip").forEach(function (x) { x.classList.toggle("is-active", x.dataset.filter === "active"); });
+    }
 
     var shown = decorated.filter(function (d) { return filter === "all" || d.st === filter; });
 
@@ -659,12 +700,6 @@
     });
     document.addEventListener("keydown", function (e) { if (e.key === "Escape") closePdf(); });
 
-    $("#infoShare").addEventListener("click", function (e) {
-      e.preventDefault();
-      var data = { title: document.title, url: location.href };
-      if (navigator.share) { navigator.share(data).catch(function () {}); }
-      else if (navigator.clipboard) { navigator.clipboard.writeText(location.href).then(function () { toast(t("share.copied")); }); }
-    });
   }
 
   function setLang(l) {

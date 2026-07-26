@@ -1,0 +1,30 @@
+name: Cleanup expired offers
+
+on:
+  schedule:
+    - cron: "0 1 * * *"   # يوميًا 01:00 بتوقيت غرينتش (04:00 بتوقيت الكويت)
+  workflow_dispatch: {}    # يمكن تشغيله يدويًا من تبويب Actions
+
+permissions:
+  contents: write
+
+jobs:
+  cleanup:
+    runs-on: ubuntu-latest
+    steps:
+      - uses: actions/checkout@v4
+
+      - name: Remove offers ended more than a day ago
+        run: node .github/scripts/cleanup-offers.mjs
+
+      - name: Commit & push if changed
+        run: |
+          if [ -n "$(git status --porcelain)" ]; then
+            git config user.name "github-actions[bot]"
+            git config user.email "41898282+github-actions[bot]@users.noreply.github.com"
+            git add -A
+            git commit -m "حذف العروض المنتهية تلقائيًا"
+            git push
+          else
+            echo "Nothing to commit."
+          fi

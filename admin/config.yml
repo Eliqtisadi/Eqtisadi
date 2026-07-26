@@ -83,8 +83,8 @@ collections:
         fields:
           - { label: "اسم السوق (عربي)", name: "name_ar", widget: "string" }
           - { label: "اسم السوق (إنجليزي)", name: "name_en", widget: "string", required: false }
-          - { label: "اسم الفرع (عربي)", name: "branch_ar", widget: "string", required: false }
-          - { label: "اسم الفرع (إنجليزي)", name: "branch_en", widget: "string", required: false }
+          - { label: "الموقع / السوق (عربي)", name: "branch_ar", widget: "string", required: false, hint: "يظهر بجانب الاسم، مثل: أسواق القرين" }
+          - { label: "الموقع / السوق (إنجليزي)", name: "branch_en", widget: "string", required: false }
           - { label: "جملة تعريفية (عربي)", name: "tagline_ar", widget: "text", required: false }
           - { label: "جملة تعريفية (إنجليزي)", name: "tagline_en", widget: "text", required: false }
           - { label: "اللون الأساسي (أزرق اللوجو)", name: "brand_color", widget: "color", default: "#0E50FC", required: false }
@@ -96,11 +96,18 @@ collections:
           - { label: "العنوان (عربي)", name: "address_ar", widget: "text", required: false }
           - { label: "العنوان (إنجليزي)", name: "address_en", widget: "text", required: false }
           - { label: "رابط الاتجاهات (خرائط جوجل)", name: "directions_url", widget: "string", required: false }
-          - label: "رابط تضمين الخريطة"
-            name: "map_embed_url"
-            widget: "string"
+          - label: "خط العرض (Latitude)"
+            name: "map_lat"
+            widget: "number"
+            value_type: "float"
             required: false
-            hint: "من خرائط جوجل: مشاركة ← تضمين خريطة ← انسخ الرابط الموجود داخل src أو انسخ كود iframe كاملًا."
+            hint: "من خرائط جوجل: اضغط بزر الماوس الأيمن على مكان المتجر ← انسخ الإحداثيات (أول رقم)."
+          - label: "خط الطول (Longitude)"
+            name: "map_lng"
+            widget: "number"
+            value_type: "float"
+            required: false
+            hint: "الرقم الثاني من الإحداثيات."
           - label: "مواعيد العمل"
             name: "hours"
             widget: "list"

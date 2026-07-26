@@ -103,7 +103,7 @@ svg[viewBox]{width:20px;height:20px;fill:none;stroke:currentColor;stroke-width:1
 .site-header.scrolled{border-bottom-color:var(--line);box-shadow:var(--shadow-xs)}
 .header-inner{display:flex;align-items:center;gap:18px;height:70px}
 .brand{display:flex;align-items:center;min-width:0}
-.brand-logo{height:33px;width:auto;flex:none}
+.brand-logo{height:40px;width:auto;flex:none}
 .header-nav{display:flex;gap:4px;margin-inline:auto;font-size:14.5px;font-weight:700}
 .header-nav a{padding:9px 14px;border-radius:10px;color:var(--text-2);transition:color .15s ease,background .15s ease}
 .header-nav a:hover{color:var(--ink)}
@@ -283,21 +283,30 @@ html[lang="en"] .hero-choice-arrow{transform:scaleX(-1)}
 .empty svg{width:44px;height:44px;opacity:.5;color:var(--brand)}
 
 /* ---------- Social ---------- */
-.social-grid{display:grid;gap:14px;grid-template-columns:repeat(auto-fill,minmax(210px,1fr))}
+.social-grid{display:grid;gap:14px;grid-template-columns:repeat(auto-fill,minmax(230px,1fr))}
 .social-card{
-  display:flex;align-items:center;gap:14px;padding:15px;
-  background:var(--surface);border:1px solid var(--line);border-radius:var(--radius-sm);
-  transition:transform .15s ease,border-color .15s ease;
+  display:flex;align-items:center;gap:14px;padding:16px 18px;
+  background:var(--surface);border:1px solid var(--line);border-radius:16px;
+  transition:transform .18s ease, box-shadow .18s ease, border-color .18s ease, background .18s ease;
 }
-.social-card:hover{transform:translateY(-2px);border-color:var(--sc,var(--ink))}
+.social-card:hover{
+  transform:translateY(-3px);box-shadow:var(--shadow-lg);
+  border-color:var(--sc,var(--brand));
+  background:color-mix(in srgb, var(--sc,var(--brand)) 6%, var(--surface));
+}
 .social-glyph{
-  width:44px;height:44px;flex:none;border-radius:12px;display:grid;place-items:center;color:#fff;
-  background:var(--sc,var(--brand));
+  width:48px;height:48px;flex:none;border-radius:14px;display:grid;place-items:center;color:#fff;
+  background:var(--sc,var(--brand));box-shadow:0 8px 18px -10px var(--sc,var(--brand));
+  transition:transform .18s ease;
 }
-.social-glyph svg{stroke-width:1.8}
+.social-card:hover .social-glyph{transform:scale(1.06)}
+.social-glyph svg{width:24px;height:24px;stroke-width:1.8}
 .social-text{display:flex;flex-direction:column;min-width:0}
-.social-text b{font-size:15px;font-weight:800}
-.social-text span{font-size:13px;color:var(--text-2);white-space:nowrap;overflow:hidden;text-overflow:ellipsis}
+.social-text b{font-size:15.5px;font-weight:800}
+.social-text span{font-size:12.5px;color:var(--text-2);white-space:nowrap;overflow:hidden;text-overflow:ellipsis}
+.social-arrow{margin-inline-start:auto;flex:none;color:var(--line-strong);display:grid;place-items:center;transition:color .18s ease}
+.social-arrow svg{width:18px;height:18px}
+.social-card:hover .social-arrow{color:var(--sc,var(--brand))}
 
 /* ---------- Branch info ---------- */
 .branch-grid{display:grid;gap:20px;grid-template-columns:repeat(auto-fit,minmax(300px,1fr))}
@@ -319,15 +328,23 @@ html[lang="en"] .hero-choice-arrow{transform:scaleX(-1)}
 .open-state.is-open{color:var(--ok)}
 .open-state.is-closed{color:var(--dim)}
 .map-card{padding:0;overflow:hidden}
-/* aspect-ratio + min-height كان بيفرض عرض أكبر من الكارت على الموبايل */
-.map-frame{width:100%;aspect-ratio:16/11}
+.map-frame{width:100%;aspect-ratio:16/11;min-height:280px}
 .map-frame iframe{width:100%;height:100%;border:0;display:block}
+/* خريطة Leaflet */
+.map-frame .leaflet-container{width:100%;height:100%;background:var(--surface-2);font-family:var(--font-ar)}
+.map-logo-marker img{width:48px;height:48px;filter:drop-shadow(0 4px 10px rgba(20,33,58,.45));cursor:pointer}
+.map-label{
+  background:var(--surface);border:1px solid var(--line-strong);border-radius:10px;
+  padding:6px 12px;font-weight:800;font-size:13px;color:var(--ink);white-space:nowrap;
+  box-shadow:var(--shadow);
+}
+.map-label.leaflet-tooltip-top::before{border-top-color:var(--surface)}
 
 /* ---------- Footer ---------- */
 .site-footer{border-top:1px solid var(--line);background:var(--surface);padding:26px 0;font-size:14px}
 .footer-inner{display:flex;flex-wrap:wrap;gap:12px;align-items:center;justify-content:space-between}
 .footer-brand{display:flex;align-items:center;gap:10px}
-.footer-brand img{height:30px;width:auto}
+.footer-brand img{height:34px;width:auto}
 .footer-links{display:flex;gap:18px;align-items:center}
 .footer-links a{font-weight:700;color:var(--brand)}
 .footer-links a:hover{color:var(--accent)}
