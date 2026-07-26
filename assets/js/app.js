@@ -150,6 +150,11 @@
     clearTimeout(toast._t);
     toast._t = setTimeout(function () { el.hidden = true; }, 2600);
   }
+  // ترميز مسارات الملفات ذات الأسماء العربية (بدون ترميز مزدوج)
+  function encUrl(u) {
+    u = String(u || "");
+    try { return /%[0-9a-fA-F]{2}/.test(u) ? u : encodeURI(u); } catch (e) { return u; }
+  }
   function telHref(v) { return "tel:" + String(v || "").replace(/[^\d+]/g, ""); }
   function waHref(v, text) {
     var n = String(v || "").replace(/[^\d]/g, "");
@@ -464,9 +469,9 @@
 
   function renderThumb(cover, url) {
     // تجنّب تحميل ملف ضخم لمجرّد صورة مصغّرة (كتالوجات كبيرة) — عندها يظل الشكل الافتراضي
-    fetch(url, { method: "HEAD" }).then(function (r) {
+    fetch(encUrl(url), { method: "HEAD" }).then(function (r) {
       var len = parseInt(r.headers.get("content-length") || "0", 10);
-      if (len && len > 12 * 1024 * 1024) return;
+      if (len && len > 12 * 1024 * 1024) { cover.classList.remove("is-loading"); return; }
       drawThumb(cover, url);
     }).catch(function () { drawThumb(cover, url); });
   }
@@ -484,7 +489,7 @@
   function drawThumb(cover, url) {
     ensurePdfJs(function () {
       if (!window.pdfjsLib) { cover.classList.remove("is-loading"); return; }
-      var task = pdfjsLib.getDocument({ url: url });
+      var task = pdfjsLib.getDocument({ url: encUrl(url) });
       task.promise.then(function (pdf) {
         return pdf.getPage(1);
       }).then(function (page) {
@@ -536,7 +541,7 @@
       actions =
         '<button class="btn btn-primary btn-sm js-view" type="button" data-pdf="' + esc(pdf) + '" data-title="' + esc(title) + '">' +
         svg(ICONS.file) + "<span>" + esc(t("offer.view")) + "</span></button>" +
-        '<a class="btn btn-ghost btn-sm" href="' + esc(pdf) + '" download target="_blank" rel="noopener">' +
+        '<a class="btn btn-ghost btn-sm" href="' + esc(encUrl(pdf)) + '" download target="_blank" rel="noopener">' +
         '<svg viewBox="0 0 24 24" aria-hidden="true"><path d="M12 4v11"/><path d="M8 11l4 4 4-4"/><path d="M5 19h14"/></svg>' +
         "<span>" + esc(t("offer.download")) + "</span></a>";
     }
@@ -554,6 +559,7 @@
   /* -------------------------------- PDF modal ------------------------------ */
   var modal = null;
   function openPdf(url, title) {
+    url = encUrl(url);
     modal = $("#pdfModal");
     $("#pdfModalTitle").textContent = title || "";
     $("#pdfDownload").href = url;
