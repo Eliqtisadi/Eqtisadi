@@ -1,37 +1,45 @@
 {
   "offers": [
     {
-      "title_ar": "عروض نهاية الأسبوع",
-      "title_en": "Weekend Deals",
-      "desc_ar": "خصومات تصل إلى ٣٠٪ على اللحوم والدواجن والألبان طوال أيام الخميس والجمعة والسبت.",
-      "desc_en": "Up to 30% off meat, poultry and dairy every Thursday to Saturday.",
       "start": "2026-07-20",
+      "title_en": "Weekend Deals",
+      "pdf": "offers/sample-offer.pdf",
+      "desc_en": "Up to 30% off meat, poultry and dairy every Thursday to Saturday.",
+      "cover": "",
+      "title_ar": "عروض نهاية الأسبوع",
+      "pinned": true,
       "end": "2026-08-05",
-      "pdf": "offers/sample-offer.pdf",
-      "cover": "",
-      "pinned": true
+      "desc_ar": "خصومات تصل إلى ٣٠٪ على اللحوم والدواجن والألبان طوال أيام الخميس والجمعة والسبت."
     },
     {
-      "title_ar": "عروض شهر أغسطس",
-      "title_en": "August Catalogue",
-      "desc_ar": "كتالوج العروض الشهري الكامل — أكثر من ٢٠٠ صنف بأسعار مخفضة.",
-      "desc_en": "The full monthly catalogue — over 200 items at reduced prices.",
       "start": "2026-08-10",
-      "end": "2026-08-31",
+      "title_en": "August Catalogue",
       "pdf": "offers/sample-offer.pdf",
+      "desc_en": "The full monthly catalogue — over 200 items at reduced prices.",
       "cover": "",
-      "pinned": false
+      "title_ar": "عروض شهر أغسطس",
+      "pinned": false,
+      "end": "2026-08-31",
+      "desc_ar": "كتالوج العروض الشهري الكامل — أكثر من ٢٠٠ صنف بأسعار مخفضة."
     },
     {
-      "title_ar": "عروض المدارس",
-      "title_en": "Back to School",
-      "desc_ar": "أدوات مدرسية ومستلزمات التغذية المدرسية بأسعار خاصة.",
-      "desc_en": "Stationery and lunchbox essentials at special prices.",
       "start": "2026-06-01",
-      "end": "2026-06-30",
+      "title_en": "Back to School",
       "pdf": "offers/sample-offer.pdf",
+      "desc_en": "Stationery and lunchbox essentials at special prices.",
       "cover": "",
-      "pinned": false
+      "title_ar": "عروض المدارس",
+      "pinned": false,
+      "end": "2026-06-30",
+      "desc_ar": "أدوات مدرسية ومستلزمات التغذية المدرسية بأسعار خاصة."
+    },
+    {
+      "pinned": true,
+      "title_ar": "عروض فرع العقيلة",
+      "title_en": "Al-Eqaila Branch Offers",
+      "start": "2026-07-26",
+      "end": "2026-07-29",
+      "pdf": "/offers/عروض-فرع-العقيله-.pdf"
     }
   ]
 }
