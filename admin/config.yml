@@ -6,7 +6,7 @@
 
 backend:
   name: github
-  repo: USERNAME/REPOSITORY      # <-- غيّر هذا السطر
+  repo: Eliqtisadi/Eqtisadi
   branch: main
   commit_messages:
     create: 'إضافة {{collection}} "{{slug}}"'
