@@ -673,17 +673,41 @@
     document.body.style.overflow = "";
   }
 
+  // مؤشر التنقل يتبع القسم الظاهر أثناء التمرير (بدلاً من الثبات على «الرئيسية»)
+  var SPY_IDS = ["top", "offers", "social", "branch"];
+  function updateActiveNav() {
+    var current = "top";
+    for (var i = 0; i < SPY_IDS.length; i++) {
+      var el = document.getElementById(SPY_IDS[i]);
+      if (el && el.getBoundingClientRect().top <= 130) current = SPY_IDS[i];
+    }
+    // عند نهاية الصفحة، فعّل آخر قسم
+    if ((window.innerHeight + window.scrollY) >= document.documentElement.scrollHeight - 4) {
+      current = SPY_IDS[SPY_IDS.length - 1];
+    }
+    $$(".header-nav a").forEach(function (a) {
+      a.classList.toggle("is-active", a.getAttribute("href") === "#" + current);
+    });
+  }
+
   /* --------------------------------- events -------------------------------- */
   function bind() {
     $("#langToggle").addEventListener("click", function () {
       setLang(lang === "ar" ? "en" : "ar");
     });
 
-    // الهيدر العائم يتحوّل لشريط صلب بعد التمرير لأسفل
+    // الهيدر + مؤشر القسم الحالي + زر الأعلى — كلها على حدث تمرير واحد
     var header = $("#header");
-    var onScroll = function () { header.classList.toggle("scrolled", window.scrollY > 24); };
+    var toTop = $("#toTop");
+    var onScroll = function () {
+      var y = window.scrollY;
+      header.classList.toggle("scrolled", y > 24);
+      if (toTop) toTop.classList.toggle("is-visible", y > 420);
+      updateActiveNav();
+    };
     window.addEventListener("scroll", onScroll, { passive: true });
     onScroll();
+    if (toTop) toTop.addEventListener("click", function () { window.scrollTo({ top: 0, behavior: "smooth" }); });
 
     $$(".chip").forEach(function (c) {
       c.addEventListener("click", function () {

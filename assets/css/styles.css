@@ -109,6 +109,8 @@ svg[viewBox]{width:20px;height:20px;fill:none;stroke:currentColor;stroke-width:1
 .header-nav a{padding:9px 14px;border-radius:10px;color:var(--text-2);transition:color .15s ease,background .15s ease}
 .header-nav a:hover{color:var(--ink)}
 .header-nav a.is-active{color:var(--ink);background:color-mix(in srgb,var(--ink) 7%, transparent)}
+/* عناصر التنقل فقط تتبع اتجاه اللغة (يسار في الإنجليزي) بينما اللوجو والأزرار ثابتة */
+html[lang="en"] .header-nav{direction:ltr}
 .header-actions{display:flex;align-items:center;gap:8px}
 .lang-btn{
   display:inline-flex;align-items:center;gap:6px;
@@ -382,6 +384,20 @@ html[lang="en"] .hero-choice-arrow{transform:scaleX(-1)}
   .modal-box{height:100vh;width:100vw;border-radius:0}
   #pdfOpenNew{display:none}
 }
+
+/* ---------- زر الذهاب للأعلى (عائم) ---------- */
+.to-top{
+  position:fixed;bottom:22px;inset-inline-end:22px;z-index:60;
+  width:48px;height:48px;border-radius:50%;border:1px solid rgba(255,255,255,.14);cursor:pointer;
+  display:grid;place-items:center;background:var(--ink);color:#fff;
+  box-shadow:0 14px 30px -12px rgba(20,33,58,.6);
+  opacity:0;transform:translateY(14px) scale(.9);pointer-events:none;
+  transition:opacity .25s ease, transform .25s ease, background .2s ease;
+}
+.to-top.is-visible{opacity:1;transform:none;pointer-events:auto}
+.to-top:hover{background:var(--brand)}
+.to-top svg{width:22px;height:22px;stroke:#fff;stroke-width:2.2}
+@media (max-width:560px){ .to-top{width:44px;height:44px;bottom:16px;inset-inline-end:16px} }
 
 /* ---------- Toast ---------- */
 .toast{
