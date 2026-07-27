@@ -176,7 +176,12 @@ html[lang="en"] .header-nav{direction:ltr}
 }
 @media (max-width:840px){
   .hero-card{grid-template-columns:1fr;gap:0}
-  .hero-visual{display:none}
+  /* السلة تبقى علامة مائية خافتة خلف النص على الموبايل */
+  .hero-visual{position:absolute;inset:0;z-index:0;display:grid;place-items:center;pointer-events:none;margin:0}
+  .hero-visual::before{width:72%;opacity:.4}
+  .hero-emblem{width:auto}
+  .hero-emblem img{width:min(86vw,440px);opacity:.12}
+  .hero-inner{position:relative;z-index:1}
 }
 
 /* الكروت — مكدّسة فوق بعض لتظل مرتاحة */
