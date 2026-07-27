@@ -1,0 +1,8 @@
+{
+  // إعداد Cloudflare Workers لخدمة الموقع الثابت (بدون سكربت — أصول فقط)
+  "name": "eqtisadi",
+  "compatibility_date": "2024-11-01",
+  "assets": {
+    "directory": "."
+  }
+}
