@@ -109,6 +109,7 @@
   var site = {};
   var offers = [];
   var filter = "active";
+  var reduceMotion = !!(window.matchMedia && window.matchMedia("(prefers-reduced-motion: reduce)").matches);
 
   function t(key, vars) {
     var s = (I18N[lang] && I18N[lang][key]) || I18N.ar[key] || key;
@@ -360,6 +361,7 @@
         '<span class="social-text"><b>' + esc(label) + "</b><span dir='ltr'>" + esc(handle) + "</span></span>" +
         '<span class="social-arrow" aria-hidden="true">' + svg('<path d="M7 17L17 7"/><path d="M8 7h9v9"/>') + "</span></a>";
     }).join("");
+    setupReveals();
   }
 
   function prettyUrl(u) {
@@ -408,6 +410,44 @@
     });
   }
 
+  /* ------------------- أنيميشن الظهور عند التمرير ------------------- */
+  var _revObs = null;
+  function revObserver() {
+    if (_revObs || reduceMotion || !("IntersectionObserver" in window)) return _revObs;
+    _revObs = new IntersectionObserver(function (ents, obs) {
+      ents.forEach(function (en) { if (en.isIntersecting) { en.target.classList.add("in"); obs.unobserve(en.target); } });
+    }, { rootMargin: "0px 0px -8% 0px", threshold: 0.06 });
+    return _revObs;
+  }
+  function revealGroup(sel, stagger) {
+    var io = revObserver();
+    $$(sel).forEach(function (el, i) {
+      if (el.dataset.rev) return;
+      el.dataset.rev = "1";
+      el.classList.add("reveal");
+      if (stagger) el.style.transitionDelay = (i * stagger) + "ms";
+      if (io) io.observe(el); else el.classList.add("in");
+    });
+  }
+  function setupReveals() {
+    if (reduceMotion) return;
+    revealGroup(".section-head", 0);
+    revealGroup("#offersGrid .offer", 70);
+    revealGroup("#socialGrid .social-card", 60);
+    revealGroup(".branch-grid .card", 80);
+  }
+
+  function countUpBadge(el, target) {
+    var dur = 650, t0 = null;
+    function step(ts) {
+      if (!t0) t0 = ts;
+      var p = Math.min(1, (ts - t0) / dur);
+      el.textContent = t("hero.offersCount", { n: Math.round(target * p) });
+      if (p < 1) requestAnimationFrame(step);
+    }
+    requestAnimationFrame(step);
+  }
+
   function renderOffers() {
     var grid = $("#offersGrid");
     var decorated = offers.map(function (o) { return { o: o, st: statusOf(o) }; });
@@ -437,7 +477,10 @@
     var badge = $("#heroOffersCount");
     if (badge) {
       badge.hidden = activeCount === 0;
-      badge.textContent = t("hero.offersCount", { n: activeCount });
+      if (activeCount > 0) {
+        badge.textContent = t("hero.offersCount", { n: activeCount });   // القيمة النهائية دائمًا
+        if (!reduceMotion && !badge._counted) { badge._counted = true; countUpBadge(badge, activeCount); }
+      }
     }
 
     $("#offersEmpty").hidden = shown.length > 0;
@@ -448,6 +491,7 @@
     });
 
     generateThumbs(grid);
+    setupReveals();
   }
 
   /* ---------------------- PDF first-page thumbnails ------------------------ */
@@ -676,13 +720,19 @@
   // مؤشر التنقل يتبع القسم الظاهر أثناء التمرير (بدلاً من الثبات على «الرئيسية»)
   var SPY_IDS = ["top", "offers", "social", "branch"];
   function updateActiveNav() {
+    var y = window.scrollY + 140;                 // خط القراءة أسفل الهيدر
     var current = "top";
-    for (var i = 0; i < SPY_IDS.length; i++) {
+    // نتخطّى "top" ونستخدم الموضع المطلق مع حارس (>200) حتى لا تُحسب الأقسام قبل تحميل المحتوى
+    for (var i = 1; i < SPY_IDS.length; i++) {
       var el = document.getElementById(SPY_IDS[i]);
-      if (el && el.getBoundingClientRect().top <= 130) current = SPY_IDS[i];
+      if (!el) continue;
+      var absTop = el.getBoundingClientRect().top + window.scrollY;
+      if (absTop > 200 && absTop <= y) current = SPY_IDS[i];
     }
-    // عند نهاية الصفحة، فعّل آخر قسم
-    if ((window.innerHeight + window.scrollY) >= document.documentElement.scrollHeight - 4) {
+    // فعّل آخر قسم فقط عند بلوغ نهاية صفحة قابلة للتمرير فعلًا
+    var doc = document.documentElement;
+    if (doc.scrollHeight > window.innerHeight + 8 &&
+        (window.innerHeight + window.scrollY) >= doc.scrollHeight - 4) {
       current = SPY_IDS[SPY_IDS.length - 1];
     }
     $$(".header-nav a").forEach(function (a) {
@@ -696,16 +746,20 @@
       setLang(lang === "ar" ? "en" : "ar");
     });
 
-    // الهيدر + مؤشر القسم الحالي + زر الأعلى — كلها على حدث تمرير واحد
+    // الهيدر + مؤشر القسم الحالي + زر الأعلى + بارالاكس العربة — كلها على حدث تمرير واحد
     var header = $("#header");
     var toTop = $("#toTop");
+    var heroEmblem = $(".hero-emblem");
     var onScroll = function () {
       var y = window.scrollY;
       header.classList.toggle("scrolled", y > 24);
       if (toTop) toTop.classList.toggle("is-visible", y > 420);
+      if (heroEmblem && !reduceMotion && y < 1000) heroEmblem.style.transform = "translateY(" + (y * 0.06).toFixed(1) + "px)";
       updateActiveNav();
     };
     window.addEventListener("scroll", onScroll, { passive: true });
+    window.addEventListener("resize", updateActiveNav, { passive: true });
+    window.addEventListener("load", updateActiveNav);
     onScroll();
     if (toTop) toTop.addEventListener("click", function () { window.scrollTo({ top: 0, behavior: "smooth" }); });
 
@@ -751,6 +805,10 @@
     applyStaticText();
     bind();
 
+    // تشغيل دخول الهيرو بالتتابع (setTimeout مضمون التنفيذ عكس rAF في التبويبات المخفية)
+    var revealHero = function () { var hc = $(".hero-card"); if (hc) hc.classList.add("ready"); };
+    if (reduceMotion) revealHero(); else setTimeout(revealHero, 70);
+
     Promise.all([load("content/site.json"), load("content/offers.json")])
       .then(function (res) {
         site = res[0] || {};
@@ -759,6 +817,8 @@
         applyStaticText();     // إعادة تطبيق النصوص بعد الدمج
         applySite();
         renderOffers();
+        updateActiveNav();     // إعادة الحساب بعد تحميل المحتوى (يمنع ثبات التحديد خطأً)
+        setTimeout(updateActiveNav, 400);
       })
       .catch(function (err) {
         console.error(err);

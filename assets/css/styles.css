@@ -406,7 +406,37 @@ html[lang="en"] .hero-choice-arrow{transform:scaleX(-1)}
   font-size:14px;font-weight:700;box-shadow:var(--shadow-lg);animation:rise .2s ease;
 }
 
+/* ========================= Animations ========================= */
+/* ١ + ٣: دخول الهيرو بالتتابع */
+.hero-eyebrow,.hero-title,.hero-sub,.hero-cards>*,.hero-visual{
+  opacity:0;transform:translateY(16px);
+  transition:opacity .7s cubic-bezier(.22,1,.36,1), transform .7s cubic-bezier(.22,1,.36,1);
+}
+.hero-visual{transform:translateY(16px) scale(.97)}
+.hero-card.ready .hero-eyebrow{opacity:1;transform:none;transition-delay:.05s}
+.hero-card.ready .hero-title{opacity:1;transform:none;transition-delay:.14s}
+.hero-card.ready .hero-sub{opacity:1;transform:none;transition-delay:.23s}
+.hero-card.ready .hero-cards>*:nth-child(1){opacity:1;transform:none;transition-delay:.33s}
+.hero-card.ready .hero-cards>*:nth-child(2){opacity:1;transform:none;transition-delay:.41s}
+.hero-card.ready .hero-visual{opacity:1;transform:none;transition-delay:.12s}
+/* بارالاكس عربة الهيرو (transform يُضبط من JS) */
+.hero-emblem{will-change:transform}
+
+/* ٢: ظهور العناصر عند التمرير */
+.reveal{opacity:0;transform:translateY(24px);transition:opacity .6s cubic-bezier(.22,1,.36,1), transform .6s cubic-bezier(.22,1,.36,1)}
+.reveal.in{opacity:1;transform:none}
+
+/* ٤: تفاعلات دقيقة */
+.btn:active{transform:translateY(1px)}
+.hero-choice:active{transform:translateY(-1px) scale(.995)}
+.chip:active{transform:translateY(1px)}
+.social-card:active{transform:translateY(-1px)}
+.to-top:active{transform:scale(.94)}
+.header-nav a{transition:color .15s ease, background .2s cubic-bezier(.22,1,.36,1)}
+
 @media (prefers-reduced-motion: reduce){
   *{animation:none !important;transition:none !important}
   html{scroll-behavior:auto}
+  /* أظهر كل شيء فورًا دون حركة */
+  .hero-eyebrow,.hero-title,.hero-sub,.hero-cards>*,.hero-visual,.reveal{opacity:1 !important;transform:none !important}
 }
