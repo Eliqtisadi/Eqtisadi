@@ -1,0 +1,10 @@
+# ملفات لا يجب نشرها كأصول عامة على Cloudflare
+.git/
+.github/
+.wrangler/
+node_modules/
+netlify.toml
+wrangler.jsonc
+README.md
+.gitignore
+.assetsignore
