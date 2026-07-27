@@ -433,8 +433,14 @@
     if (reduceMotion) return;
     revealGroup(".section-head", 0);
     revealGroup("#offersGrid .offer", 70);
-    revealGroup("#socialGrid .social-icon", 45);
     revealGroup(".branch-grid .card", 80);
+    // أيقونات التواصل تظل ظاهرة دائمًا (بدون إخفاء) لتفادي أي خلل في المؤشر على الموبايل
+    // صمّام أمان: أظهر أي عنصر لم يُكشف خلال 2.8 ثانية مهما حدث
+    if (!setupReveals._safety) {
+      setupReveals._safety = setTimeout(function () {
+        $$(".reveal:not(.in)").forEach(function (el) { el.classList.add("in"); });
+      }, 2800);
+    }
   }
 
   function countUpBadge(el, target) {
