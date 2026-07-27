@@ -67,7 +67,8 @@
     facebook:  { name: { ar: "فيسبوك", en: "Facebook" }, color: "#1877F2",
       svg: '<path d="M15 3h-2.2A3.8 3.8 0 0 0 9 6.8V10H6.5v3.2H9V21h3.2v-7.8H15l.5-3.2h-3.3V7.2c0-.6.4-1 1-1H15V3z"/>' },
     instagram: { name: { ar: "إنستجرام", en: "Instagram" }, color: "#E1306C",
-      svg: '<rect x="3.5" y="3.5" width="17" height="17" rx="5"/><circle cx="12" cy="12" r="4"/><circle cx="17" cy="7" r=".8" fill="currentColor"/>' },
+      grad: "linear-gradient(45deg,#feda75 5%,#fa7e1e 25%,#d62976 50%,#962fbf 75%,#4f5bd5 95%)",
+      svg: '<rect x="3.5" y="3.5" width="17" height="17" rx="5"/><circle cx="12" cy="12" r="4"/><circle cx="17" cy="7" r=".9" fill="currentColor" stroke="none"/>' },
     whatsapp:  { name: { ar: "واتساب", en: "WhatsApp" }, color: "#25D366",
       svg: '<path d="M20.5 12a8.5 8.5 0 0 1-12.7 7.4L3.5 20.5l1.1-4.2A8.5 8.5 0 1 1 20.5 12z"/><path d="M9 9.4c0 3.1 2.5 5.6 5.6 5.6l1-1.7-2-1-.9 1.1a5.2 5.2 0 0 1-2.1-2.1l1.1-.9-1-2z"/>' },
     tiktok:    { name: { ar: "تيك توك", en: "TikTok" }, color: "#111827",
@@ -349,17 +350,16 @@
     if (!list.length) { $("#social").hidden = true; return; }
     $("#social").hidden = false;
 
+    grid.className = "social-icons";
     grid.innerHTML = list.map(function (s) {
       var key = String(s.platform || "website").toLowerCase();
       var meta = SOCIAL[key] || SOCIAL.website;
       var label = pick(s, "label") || meta.name[lang] || meta.name.ar;
-      var handle = s.handle || prettyUrl(s.url);
-      var color = s.color || meta.color || "var(--brand)";
+      var bg = s.color || meta.grad || meta.color || "var(--brand)";
       var fg = meta.fg ? ' style="color:' + meta.fg + '"' : "";
-      return '<a class="social-card" href="' + esc(s.url) + '" target="_blank" rel="noopener" style="--sc:' + esc(color) + '">' +
-        '<span class="social-glyph"' + fg + ">" + svg(meta.svg) + "</span>" +
-        '<span class="social-text"><b>' + esc(label) + "</b><span dir='ltr'>" + esc(handle) + "</span></span>" +
-        '<span class="social-arrow" aria-hidden="true">' + svg('<path d="M7 17L17 7"/><path d="M8 7h9v9"/>') + "</span></a>";
+      return '<a class="social-icon" href="' + esc(s.url) + '" target="_blank" rel="noopener" ' +
+        'title="' + esc(label) + '" aria-label="' + esc(label) + '" style="--sc:' + esc(bg) + '">' +
+        '<span' + fg + ">" + svg(meta.svg) + "</span></a>";
     }).join("");
     setupReveals();
   }
@@ -433,7 +433,7 @@
     if (reduceMotion) return;
     revealGroup(".section-head", 0);
     revealGroup("#offersGrid .offer", 70);
-    revealGroup("#socialGrid .social-card", 60);
+    revealGroup("#socialGrid .social-icon", 45);
     revealGroup(".branch-grid .card", 80);
   }
 
@@ -483,6 +483,10 @@
       }
     }
 
+    // أكثر من 3 عروض => سلايدر أفقي بشكل احترافي
+    var isScroller = shown.length > 3;
+    grid.classList.toggle("is-scroller", isScroller);
+
     $("#offersEmpty").hidden = shown.length > 0;
     grid.innerHTML = shown.map(function (d) { return offerCard(d.o, d.st); }).join("");
 
@@ -492,6 +496,30 @@
 
     generateThumbs(grid);
     setupReveals();
+    if (isScroller) queueSwipeHint(grid);
+  }
+
+  // تلميح السحب: شدّة خفيفة تجاه اتجاه المزيد من العروض لتنبيه المستخدم
+  function queueSwipeHint(el) {
+    if (reduceMotion || el._hintDone) return;
+    var fire = function () {
+      if (el.scrollWidth <= el.clientWidth + 8) return;   // لا يوجد فائض للتمرير
+      el._hintDone = true;
+      var rtl = getComputedStyle(el).direction === "rtl";
+      var d = rtl ? -1 : 1, amt = 48;
+      [[350, d], [750, -d], [1100, d], [1450, -d]].forEach(function (st) {
+        setTimeout(function () {
+          try { el.scrollBy({ left: st[1] * amt, behavior: "smooth" }); }
+          catch (e) { el.scrollLeft += st[1] * amt; }
+        }, st[0]);
+      });
+    };
+    if ("IntersectionObserver" in window) {
+      var io = new IntersectionObserver(function (ents, obs) {
+        ents.forEach(function (en) { if (en.isIntersecting) { obs.disconnect(); fire(); } });
+      }, { threshold: 0.3 });
+      io.observe(el);
+    } else { setTimeout(fire, 500); }
   }
 
   /* ---------------------- PDF first-page thumbnails ------------------------ */

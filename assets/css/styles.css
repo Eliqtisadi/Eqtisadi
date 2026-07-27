@@ -242,6 +242,16 @@ html[lang="en"] .hero-choice-arrow{transform:scaleX(-1)}
 
 /* ---------- Offers ---------- */
 .offers-grid{display:grid;gap:20px;grid-template-columns:repeat(auto-fill,minmax(290px,1fr))}
+/* سلايدر أفقي عند تجاوز 3 عروض */
+.offers-grid.is-scroller{
+  display:flex;overflow-x:auto;gap:20px;padding:4px 2px 14px;
+  scroll-snap-type:x proximity;-webkit-overflow-scrolling:touch;
+  scrollbar-width:thin;scrollbar-color:var(--line-strong) transparent;
+}
+.offers-grid.is-scroller .offer{flex:0 0 min(84%,320px);scroll-snap-align:start}
+.offers-grid.is-scroller::-webkit-scrollbar{height:8px}
+.offers-grid.is-scroller::-webkit-scrollbar-track{background:transparent}
+.offers-grid.is-scroller::-webkit-scrollbar-thumb{background:var(--line-strong);border-radius:99px}
 .offer{
   display:flex;flex-direction:column;overflow:hidden;
   background:var(--surface);border:1px solid var(--line);border-radius:var(--radius);
@@ -315,6 +325,19 @@ html[lang="en"] .hero-choice-arrow{transform:scaleX(-1)}
 .social-arrow{margin-inline-start:auto;flex:none;color:var(--line-strong);display:grid;place-items:center;transition:color .18s ease}
 .social-arrow svg{width:18px;height:18px}
 .social-card:hover .social-arrow{color:var(--sc,var(--brand))}
+
+/* أيقونات التواصل الأفقية (شكل أيقونات التطبيقات) */
+.social-icons{display:flex;flex-wrap:wrap;gap:14px}
+.social-icon{
+  width:58px;height:58px;flex:none;border-radius:17px;display:grid;place-items:center;color:#fff;
+  background:var(--sc,var(--brand));box-shadow:0 10px 22px -12px rgba(20,33,58,.5);
+  transition:transform .18s cubic-bezier(.22,1,.36,1), box-shadow .18s ease;
+}
+.social-icon:hover{transform:translateY(-4px) scale(1.06);box-shadow:0 16px 30px -14px rgba(20,33,58,.6)}
+.social-icon:active{transform:translateY(-1px) scale(1.02)}
+.social-icon span{display:grid;place-items:center}
+.social-icon svg{width:28px;height:28px;stroke-width:1.9}
+@media (max-width:480px){ .social-icon{width:54px;height:54px;border-radius:16px} .social-icon svg{width:26px;height:26px} }
 
 /* ---------- Branch info ---------- */
 .branch-grid{display:grid;gap:20px;grid-template-columns:repeat(auto-fit,minmax(300px,1fr))}
