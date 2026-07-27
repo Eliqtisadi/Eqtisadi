@@ -187,8 +187,8 @@
       return d <= 0 ? t("cd.startsToday") : t("cd.startsIn", { d: daysWord(d) });
     }
     if (status === "active" && e) {
-      var r = daysBetween(now, e);
-      return r <= 0 ? t("cd.lastDay") : t("cd.daysLeft", { d: daysWord(r) });
+      var r = daysBetween(now, e);   // 0 = يوم النهاية نفسه (ساري حتى آخر اليوم)
+      return r <= 0 ? t("cd.lastDay") : t("cd.daysLeft", { d: daysWord(r + 1) });
     }
     return "";
   }
