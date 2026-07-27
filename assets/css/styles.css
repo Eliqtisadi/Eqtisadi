@@ -326,18 +326,18 @@ html[lang="en"] .hero-choice-arrow{transform:scaleX(-1)}
 .social-arrow svg{width:18px;height:18px}
 .social-card:hover .social-arrow{color:var(--sc,var(--brand))}
 
-/* أيقونات التواصل الأفقية (شكل أيقونات التطبيقات) */
-.social-icons{display:flex;flex-wrap:wrap;gap:14px}
-.social-icon{
+/* أيقونات القنوات الأفقية (اسم محايد لتفادي حاجبات المحتوى التي تخفي كلاسات social) */
+.channels{display:flex;flex-wrap:wrap;gap:14px}
+.channel{
   width:58px;height:58px;flex:none;border-radius:17px;display:grid;place-items:center;color:#fff;
   background:var(--sc,var(--brand));box-shadow:0 10px 22px -12px rgba(20,33,58,.5);
   transition:transform .18s cubic-bezier(.22,1,.36,1), box-shadow .18s ease;
 }
-.social-icon:hover{transform:translateY(-4px) scale(1.06);box-shadow:0 16px 30px -14px rgba(20,33,58,.6)}
-.social-icon:active{transform:translateY(-1px) scale(1.02)}
-.social-icon span{display:grid;place-items:center}
-.social-icon svg{width:28px;height:28px;stroke-width:1.9}
-@media (max-width:480px){ .social-icon{width:54px;height:54px;border-radius:16px} .social-icon svg{width:26px;height:26px} }
+.channel:hover{transform:translateY(-4px) scale(1.06);box-shadow:0 16px 30px -14px rgba(20,33,58,.6)}
+.channel:active{transform:translateY(-1px) scale(1.02)}
+.channel span{display:grid;place-items:center}
+.channel svg{width:28px;height:28px;stroke-width:1.9}
+@media (max-width:480px){ .channel{width:54px;height:54px;border-radius:16px} .channel svg{width:26px;height:26px} }
 
 /* ---------- Branch info ---------- */
 .branch-grid{display:grid;gap:20px;grid-template-columns:repeat(auto-fit,minmax(300px,1fr))}

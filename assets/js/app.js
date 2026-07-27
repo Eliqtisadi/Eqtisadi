@@ -346,18 +346,18 @@
 
   function renderSocial() {
     var list = (Array.isArray(site.socials) ? site.socials : []).filter(function (s) { return s && s.url; });
-    var grid = $("#socialGrid");
+    var grid = $("#channelsGrid");
     if (!list.length) { $("#social").hidden = true; return; }
     $("#social").hidden = false;
 
-    grid.className = "social-icons";
+    grid.className = "channels";
     grid.innerHTML = list.map(function (s) {
       var key = String(s.platform || "website").toLowerCase();
       var meta = SOCIAL[key] || SOCIAL.website;
       var label = pick(s, "label") || meta.name[lang] || meta.name.ar;
       var bg = s.color || meta.grad || meta.color || "var(--brand)";
       var fg = meta.fg ? ' style="color:' + meta.fg + '"' : "";
-      return '<a class="social-icon" href="' + esc(s.url) + '" target="_blank" rel="noopener" ' +
+      return '<a class="channel" href="' + esc(s.url) + '" target="_blank" rel="noopener" ' +
         'title="' + esc(label) + '" aria-label="' + esc(label) + '" style="--sc:' + esc(bg) + '">' +
         '<span' + fg + ">" + svg(meta.svg) + "</span></a>";
     }).join("");
