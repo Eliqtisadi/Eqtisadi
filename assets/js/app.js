@@ -428,6 +428,13 @@
         .on("click", function () { window.open(dir, "_blank", "noopener"); });
 
       setTimeout(function () { map.invalidateSize(); }, 250);
+      // إعادة ملء الخريطة كلما تغيّر ارتفاع/عرض الكارت (تمدّد الشبكة، تحميل الخطوط، تغيير المقاس)
+      if (window.ResizeObserver) {
+        var ro = new ResizeObserver(function () { map.invalidateSize(); });
+        ro.observe(host);
+      } else {
+        window.addEventListener("resize", function () { map.invalidateSize(); });
+      }
     });
   }
 
