@@ -1,48 +1,15 @@
 {
   "offers": [
     {
-      "title_ar": "عروض نهاية الأسبوع",
-      "title_en": "Weekend Deals",
-      "desc_ar": "خصومات تصل إلى 20٪ على اللحوم والدواجن والألبان طوال أيام الخميس والجمعة والسبت.",
-      "desc_en": "Up to 20% off meat, poultry and dairy every Thursday to Saturday.",
-      "start": "2026-07-20",
-      "end": "2026-08-05",
-      "pdf": "offers/sample-offer.pdf",
-      "cover": "/offers/pasted-image-1785071673242.png",
-      "pinned": true
-    },
-    {
-      "title_ar": "عروض نهاية الأسبوع",
-      "title_en": "Weekend Deals",
-      "desc_ar": "خصومات تصل إلى 20٪ على اللحوم والدواجن والألبان طوال أيام الخميس والجمعة والسبت.",
-      "desc_en": "Up to 20% off meat, poultry and dairy every Thursday to Saturday.",
-      "start": "2026-07-20",
-      "end": "2026-08-05",
-      "pdf": "offers/sample-offer.pdf",
-      "cover": "/offers/pasted-image-1785071673242.png",
-      "pinned": true
-    },
-    {
-      "title_ar": "عروض شهر أغسطس",
-      "title_en": "August Catalogue",
-      "desc_ar": "كتالوج العروض الشهري الكامل — أكثر من ٢٠٠ صنف بأسعار مخفضة.",
-      "desc_en": "The full monthly catalogue — over 200 items at reduced prices.",
-      "start": "2026-08-10",
-      "end": "2026-08-31",
-      "pdf": "offers/sample-offer.pdf",
-      "cover": "",
-      "pinned": false
-    },
-    {
-      "title_ar": "عروض فرع العقيلة",
-      "title_en": "Al-Eqaila Branch Offers",
+      "title_ar": "الاقتصادي",
+      "title_en": "",
       "desc_ar": "",
       "desc_en": "",
-      "start": "2026-07-26",
-      "end": "2026-07-29",
-      "pdf": "/offers/عروض-فرع-العقيله-.pdf",
-      "cover": "/offers/pasted-image-1785071673242.png",
-      "pinned": true
+      "start": "",
+      "end": "",
+      "pdf": "",
+      "cover": "",
+      "pinned": false
     }
   ]
 }
