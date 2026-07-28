@@ -326,6 +326,8 @@ html[lang="en"] .hero-choice-arrow{transform:scaleX(-1)}
 .social-arrow svg{width:18px;height:18px}
 .social-card:hover .social-arrow{color:var(--sc,var(--brand))}
 
+/* قسم القنوات: العنوان يمين والأيقونات على نفس السطر (توازن على الديسكتوب) */
+.section-head-channels{align-items:center}
 /* أيقونات القنوات الأفقية (اسم محايد لتفادي حاجبات المحتوى التي تخفي كلاسات social) */
 .channels{display:flex;flex-wrap:wrap;gap:20px;align-items:center}
 .channel{
@@ -340,7 +342,7 @@ html[lang="en"] .hero-choice-arrow{transform:scaleX(-1)}
 .channel svg{width:29px;height:29px;stroke-width:1.9}
 /* على الموبايل: توزيع متساوٍ على عرض الشاشة */
 @media (max-width:600px){
-  .channels{justify-content:space-between;gap:12px}
+  .channels{width:100%;justify-content:space-between;gap:12px}
   .channel{width:54px;height:54px;border-radius:16px}
   .channel svg{width:26px;height:26px}
 }
