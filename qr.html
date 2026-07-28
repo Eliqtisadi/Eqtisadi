@@ -184,13 +184,13 @@
       if (modules[r][c]) ctx.fillRect((c + quiet) * cell, (r + quiet) * cell, cell, cell);
     }
     if (logoOn() && logoReady) {
-      var logoW = Math.round(size * 0.46);
+      var logoW = Math.round(size * 0.34);
       var logoH = Math.round(logoW / logoRatio);
-      var padX = Math.round(logoH * 0.5), padY = Math.round(logoH * 0.5);
+      var padX = Math.round(logoH * 0.32), padY = Math.round(logoH * 0.32);
       var boxW = logoW + padX * 2, boxH = logoH + padY * 2;
       var bx = Math.round((size - boxW) / 2), by = Math.round((size - boxH) / 2);
       ctx.fillStyle = "#ffffff";
-      roundRect(ctx, bx, by, boxW, boxH, Math.round(boxH * 0.3)); ctx.fill();
+      roundRect(ctx, bx, by, boxW, boxH, Math.round(boxH * 0.28)); ctx.fill();
       ctx.drawImage(logoImg, bx + padX, by + padY, logoW, logoH);
     }
   }
@@ -203,10 +203,10 @@
     }
     var extra = "";
     if (logoOn() && logoDataUri) {
-      var logoW = Math.round(size * 0.46), logoH = Math.round(logoW / logoRatio);
-      var padX = Math.round(logoH * 0.5), padY = Math.round(logoH * 0.5);
+      var logoW = Math.round(size * 0.34), logoH = Math.round(logoW / logoRatio);
+      var padX = Math.round(logoH * 0.32), padY = Math.round(logoH * 0.32);
       var boxW = logoW + padX * 2, boxH = logoH + padY * 2;
-      var bx = Math.round((size - boxW) / 2), by = Math.round((size - boxH) / 2), rad = Math.round(boxH * 0.3);
+      var bx = Math.round((size - boxW) / 2), by = Math.round((size - boxH) / 2), rad = Math.round(boxH * 0.28);
       extra =
         '<rect x="' + bx + '" y="' + by + '" width="' + boxW + '" height="' + boxH + '" rx="' + rad + '" fill="#ffffff"/>' +
         '<image x="' + (bx + padX) + '" y="' + (by + padY) + '" width="' + logoW + '" height="' + logoH + '" href="' + logoDataUri + '"/>';
