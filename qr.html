@@ -80,7 +80,7 @@
 
         <div class="field">
           <label for="qUrl">رابط الصفحة</label>
-          <input type="url" id="qUrl" dir="ltr" placeholder="https://aleqtisadi.netlify.app">
+          <input type="url" id="qUrl" dir="ltr" placeholder="https://offers.eleqtesade.com">
         </div>
         <div class="field">
           <label for="qCta">الجملة الرئيسية</label>
@@ -110,7 +110,7 @@
           </div>
         </div>
 
-        <label class="check"><input type="checkbox" id="qLogo"> إظهار الشعار في منتصف الكود</label>
+        <label class="check"><input type="checkbox" id="qLogo" checked> إظهار الشعار الكامل داخل الكود</label>
 
         <div style="display:flex;gap:8px;flex-wrap:wrap;margin-top:4px">
           <button class="btn btn-primary btn-sm" id="btnPng" type="button">تحميل PNG</button>
@@ -140,10 +140,10 @@
   var modules = null;
   var logoImg = new Image();
   var logoReady = false, logoDataUri = "";
+  var logoRatio = 459 / 147; // نسبة عرض/ارتفاع اللوجو الكامل (تُحدَّث بعد التحميل)
 
   function defaultUrl() {
-    var u = new URL("index.html", location.href).href;
-    return u.replace(/^file:.*$/, "https://aleqtisadi.netlify.app/");
+    return "https://offers.eleqtesade.com";
   }
   function color() { return $("#qColor").value || "#14213A"; }
   function logoOn() { return $("#qLogo").checked; }
@@ -184,13 +184,14 @@
       if (modules[r][c]) ctx.fillRect((c + quiet) * cell, (r + quiet) * cell, cell, cell);
     }
     if (logoOn() && logoReady) {
-      var logo = Math.round(size * 0.22);
-      var pad = Math.round(logo * 0.16);
-      var box = logo + pad * 2;
-      var bx = Math.round((size - box) / 2), by = Math.round((size - box) / 2);
+      var logoW = Math.round(size * 0.46);
+      var logoH = Math.round(logoW / logoRatio);
+      var padX = Math.round(logoH * 0.5), padY = Math.round(logoH * 0.5);
+      var boxW = logoW + padX * 2, boxH = logoH + padY * 2;
+      var bx = Math.round((size - boxW) / 2), by = Math.round((size - boxH) / 2);
       ctx.fillStyle = "#ffffff";
-      roundRect(ctx, bx, by, box, box, Math.round(box * 0.2)); ctx.fill();
-      ctx.drawImage(logoImg, bx + pad, by + pad, logo, logo);
+      roundRect(ctx, bx, by, boxW, boxH, Math.round(boxH * 0.3)); ctx.fill();
+      ctx.drawImage(logoImg, bx + padX, by + padY, logoW, logoH);
     }
   }
 
@@ -202,11 +203,13 @@
     }
     var extra = "";
     if (logoOn() && logoDataUri) {
-      var logo = Math.round(size * 0.22), pad = Math.round(logo * 0.16), box = logo + pad * 2;
-      var bx = Math.round((size - box) / 2), by = Math.round((size - box) / 2), rad = Math.round(box * 0.2);
+      var logoW = Math.round(size * 0.46), logoH = Math.round(logoW / logoRatio);
+      var padX = Math.round(logoH * 0.5), padY = Math.round(logoH * 0.5);
+      var boxW = logoW + padX * 2, boxH = logoH + padY * 2;
+      var bx = Math.round((size - boxW) / 2), by = Math.round((size - boxH) / 2), rad = Math.round(boxH * 0.3);
       extra =
-        '<rect x="' + bx + '" y="' + by + '" width="' + box + '" height="' + box + '" rx="' + rad + '" fill="#ffffff"/>' +
-        '<image x="' + (bx + pad) + '" y="' + (by + pad) + '" width="' + logo + '" height="' + logo + '" href="' + logoDataUri + '"/>';
+        '<rect x="' + bx + '" y="' + by + '" width="' + boxW + '" height="' + boxH + '" rx="' + rad + '" fill="#ffffff"/>' +
+        '<image x="' + (bx + padX) + '" y="' + (by + padY) + '" width="' + logoW + '" height="' + logoH + '" href="' + logoDataUri + '"/>';
     }
     return '<svg xmlns="http://www.w3.org/2000/svg" xmlns:xlink="http://www.w3.org/1999/xlink" width="' + size + '" height="' + size + '" viewBox="0 0 ' + size + ' ' + size + '">' +
       '<rect width="' + size + '" height="' + size + '" fill="#ffffff"/><path fill="' + color() + '" d="' + d + '"/>' + extra + "</svg>";
@@ -246,10 +249,16 @@
 
   $("#btnPrint").addEventListener("click", function () { window.print(); });
 
-  /* ---------- تحميل الشعار (كـ data URI حتى لا يُفسد تصدير الكانفس) ---------- */
-  fetch("assets/img/favicon.svg").then(function (r) { return r.text(); }).then(function (txt) {
+  /* ---------- تحميل اللوجو الكامل (كـ data URI حتى لا يُفسد تصدير الكانفس) ---------- */
+  fetch("assets/img/logo.svg").then(function (r) { return r.text(); }).then(function (txt) {
+    // استخراج نسبة العرض/الارتفاع من الـ viewBox لضبط الخلفية البيضاء
+    var vb = txt.match(/viewBox\s*=\s*["']\s*[\d.\-]+\s+[\d.\-]+\s+([\d.]+)\s+([\d.]+)/i);
+    if (vb) logoRatio = parseFloat(vb[1]) / parseFloat(vb[2]);
     logoDataUri = "data:image/svg+xml;base64," + btoa(unescape(encodeURIComponent(txt)));
-    logoImg.onload = function () { logoReady = true; build(); };
+    logoImg.onload = function () {
+      if (logoImg.naturalWidth && logoImg.naturalHeight) logoRatio = logoImg.naturalWidth / logoImg.naturalHeight;
+      logoReady = true; build();
+    };
     logoImg.src = logoDataUri;
   }).catch(function () {});
 
