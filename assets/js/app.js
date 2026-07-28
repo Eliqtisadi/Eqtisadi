@@ -361,7 +361,28 @@
         'title="' + esc(label) + '" aria-label="' + esc(label) + '" style="--sc:' + esc(bg) + '">' +
         '<span' + fg + ">" + svg(meta.svg) + "</span></a>";
     }).join("");
+    revealChannels(grid);
     setupReveals();
+  }
+
+  // دخول متتابع لأيقونات القنوات — مع صمّام أمان يضمن ظهورها مهما حدث
+  function revealChannels(grid) {
+    if (reduceMotion || !grid || grid._chInit) return;
+    grid._chInit = true;
+    grid.classList.add("ch-pre");
+    var fired = false;
+    var go = function () {
+      if (fired) return; fired = true;
+      grid.classList.add("ch-animate");
+      setTimeout(function () { grid.classList.remove("ch-pre", "ch-animate"); }, 1400);
+    };
+    if ("IntersectionObserver" in window) {
+      var io = new IntersectionObserver(function (ents, obs) {
+        ents.forEach(function (en) { if (en.isIntersecting) { obs.disconnect(); go(); } });
+      }, { threshold: 0.15 });
+      io.observe(grid);
+    } else { go(); }
+    setTimeout(go, 2800);   // صمّام أمان
   }
 
   function prettyUrl(u) {

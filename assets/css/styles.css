@@ -339,6 +339,21 @@ html[lang="en"] .hero-choice-arrow{transform:scaleX(-1)}
 .channel:active{transform:translateY(-2px) scale(1.03)}
 .channel span{display:grid;place-items:center}
 .channel svg{width:29px;height:29px;stroke-width:1.9}
+/* دخول احترافي متتابع (يُفعّل من JS مع صمّام أمان) — تُزال الكلاسات بعد انتهائه ليعمل الـ hover */
+.channels.ch-pre .channel{opacity:0}
+.channels.ch-animate .channel{animation:chan-pop .6s cubic-bezier(.34,1.56,.64,1) both}
+.channels.ch-animate .channel:nth-child(1){animation-delay:.04s}
+.channels.ch-animate .channel:nth-child(2){animation-delay:.12s}
+.channels.ch-animate .channel:nth-child(3){animation-delay:.20s}
+.channels.ch-animate .channel:nth-child(4){animation-delay:.28s}
+.channels.ch-animate .channel:nth-child(5){animation-delay:.36s}
+.channels.ch-animate .channel:nth-child(6){animation-delay:.44s}
+.channels.ch-animate .channel:nth-child(7){animation-delay:.52s}
+@keyframes chan-pop{
+  0%{opacity:0;transform:translateY(16px) scale(.5)}
+  60%{opacity:1;transform:translateY(-5px) scale(1.1)}
+  100%{opacity:1;transform:none}
+}
 /* على الموبايل: توزيع متساوٍ على عرض الشاشة */
 @media (max-width:600px){
   .channels{width:100%;justify-content:space-between;gap:12px}
@@ -475,4 +490,6 @@ html[lang="en"] .hero-choice-arrow{transform:scaleX(-1)}
   html{scroll-behavior:auto}
   /* أظهر كل شيء فورًا دون حركة */
   .hero-eyebrow,.hero-title,.hero-sub,.hero-cards>*,.hero-visual,.reveal{opacity:1 !important;transform:none !important}
+  .channels.ch-pre .channel{opacity:1 !important}
+  .channels.ch-animate .channel{animation:none !important}
 }
