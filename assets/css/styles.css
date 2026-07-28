@@ -326,10 +326,9 @@ html[lang="en"] .hero-choice-arrow{transform:scaleX(-1)}
 .social-arrow svg{width:18px;height:18px}
 .social-card:hover .social-arrow{color:var(--sc,var(--brand))}
 
-/* قسم القنوات: العنوان يمين والأيقونات على نفس السطر (توازن على الديسكتوب) */
-.section-head-channels{align-items:center}
 /* أيقونات القنوات الأفقية (اسم محايد لتفادي حاجبات المحتوى التي تخفي كلاسات social) */
-.channels{display:flex;flex-wrap:wrap;gap:20px;align-items:center}
+/* في النص (سنتر) أسفل العنوان */
+.channels{display:flex;flex-wrap:wrap;gap:20px;align-items:center;justify-content:center}
 .channel{
   width:60px;height:60px;flex:none;border-radius:18px;display:grid;place-items:center;color:#fff;
   background:var(--sc,var(--brand));
