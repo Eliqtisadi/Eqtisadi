@@ -8,8 +8,8 @@
   "brand_color": "#0E50FC",
   "accent_color": "#FA2F00",
   "logo": "assets/img/logo.svg",
-  "phone": "92240545",
-  "whatsapp": "92240545",
+  "phone": "",
+  "whatsapp": "",
   "email": "",
   "address_ar": "أسواق القرين، الكويت",
   "address_en": "Al-Qurain Markets, Kuwait",
@@ -78,27 +78,37 @@
     {
       "platform": "instagram",
       "url": "https://instagram.com/",
-      "handle": "@aleqtisadi"
+      "handle": "@aleqtisadi",
+      "label_ar": "",
+      "label_en": ""
     },
     {
       "platform": "whatsapp",
       "url": "https://wa.me/9650000000",
-      "handle": "+965 0000 0000"
+      "handle": "+965 0000 0000",
+      "label_ar": "",
+      "label_en": ""
     },
     {
       "platform": "facebook",
       "url": "https://facebook.com/",
-      "handle": "@aleqtisadi"
+      "handle": "@aleqtisadi",
+      "label_ar": "",
+      "label_en": ""
     },
     {
       "platform": "tiktok",
       "url": "https://tiktok.com/",
-      "handle": "@aleqtisadi"
+      "handle": "@aleqtisadi",
+      "label_ar": "",
+      "label_en": ""
     },
     {
       "platform": "maps",
       "url": "https://www.google.com/maps/search/?api=1&query=29.2004874,48.0454125",
-      "handle": "Google Maps"
+      "handle": "Google Maps",
+      "label_ar": "",
+      "label_en": ""
     }
   ],
   "texts": {
