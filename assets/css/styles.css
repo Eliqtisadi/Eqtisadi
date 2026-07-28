@@ -327,17 +327,24 @@ html[lang="en"] .hero-choice-arrow{transform:scaleX(-1)}
 .social-card:hover .social-arrow{color:var(--sc,var(--brand))}
 
 /* أيقونات القنوات الأفقية (اسم محايد لتفادي حاجبات المحتوى التي تخفي كلاسات social) */
-.channels{display:flex;flex-wrap:wrap;gap:14px}
+.channels{display:flex;flex-wrap:wrap;gap:20px;align-items:center}
 .channel{
-  width:58px;height:58px;flex:none;border-radius:17px;display:grid;place-items:center;color:#fff;
-  background:var(--sc,var(--brand));box-shadow:0 10px 22px -12px rgba(20,33,58,.5);
-  transition:transform .18s cubic-bezier(.22,1,.36,1), box-shadow .18s ease;
+  width:60px;height:60px;flex:none;border-radius:18px;display:grid;place-items:center;color:#fff;
+  background:var(--sc,var(--brand));
+  box-shadow:0 12px 26px -12px rgba(20,33,58,.42), inset 0 1px 0 rgba(255,255,255,.2);
+  transition:transform .2s cubic-bezier(.22,1,.36,1), box-shadow .2s ease;
 }
-.channel:hover{transform:translateY(-4px) scale(1.06);box-shadow:0 16px 30px -14px rgba(20,33,58,.6)}
-.channel:active{transform:translateY(-1px) scale(1.02)}
+.channel:hover{transform:translateY(-6px) scale(1.07);box-shadow:0 22px 36px -14px rgba(20,33,58,.55), inset 0 1px 0 rgba(255,255,255,.28)}
+.channel:active{transform:translateY(-2px) scale(1.03)}
 .channel span{display:grid;place-items:center}
-.channel svg{width:28px;height:28px;stroke-width:1.9}
-@media (max-width:480px){ .channel{width:54px;height:54px;border-radius:16px} .channel svg{width:26px;height:26px} }
+.channel svg{width:29px;height:29px;stroke-width:1.9}
+/* على الموبايل: توزيع متساوٍ على عرض الشاشة */
+@media (max-width:600px){
+  .channels{justify-content:space-between;gap:12px}
+  .channel{width:54px;height:54px;border-radius:16px}
+  .channel svg{width:26px;height:26px}
+}
+@media (max-width:360px){ .channel{width:48px;height:48px} .channel svg{width:24px;height:24px} }
 
 /* ---------- Branch info ---------- */
 .branch-grid{display:grid;gap:20px;grid-template-columns:repeat(auto-fit,minmax(300px,1fr))}
