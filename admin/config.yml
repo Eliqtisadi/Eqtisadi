@@ -36,6 +36,7 @@ collections:
           - label: "العروض"
             name: "offers"
             widget: "list"
+            required: false
             label_singular: "عرض"
             summary: "{{fields.title_ar}}  ({{fields.start}} ← {{fields.end}})"
             fields:
