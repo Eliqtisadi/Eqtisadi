@@ -631,8 +631,11 @@
     if (svgEl) svgEl.remove();
     cover.classList.remove("is-placeholder", "is-loading");
     var img = new Image();
-    img.src = data; img.alt = ""; img.loading = "lazy";
+    img.alt = ""; img.loading = "lazy";
+    img.className = "mm-fade";                            // ظهور بتدريج ناعم بدل «النطّة»
+    img.src = data;
     cover.insertBefore(img, cover.firstChild);           // الشارة تظل فوق الصورة
+    requestAnimationFrame(function () { requestAnimationFrame(function () { img.classList.add("mm-in"); }); });
   }
 
   function drawThumb(cover, url) {
@@ -706,7 +709,7 @@
   }
 
   /* -------------------------------- PDF modal ------------------------------ */
-  var modal = null, pdfDoc = null, pageObserver = null;
+  var modal = null, pdfDoc = null, pageObserver = null, closeTimer = null;
 
   function openPdf(url, title) {
     url = encUrl(url);
@@ -717,14 +720,16 @@
 
     var host = $("#pdfPages");
     host.innerHTML = '<div class="pdf-loading"><div class="pdf-page-spin"></div><span>' + esc(t("modal.loading")) + "</span></div>";
+    if (closeTimer) { clearTimeout(closeTimer); closeTimer = null; }
     modal.hidden = false;
+    requestAnimationFrame(function () { modal.classList.add("is-open"); });
     document.body.style.overflow = "hidden";
 
     // يعرض صفحات الـ PDF كصور بالتدريج (صفحة صفحة) بدل تحميل الملف كله دفعة واحدة
     ensurePdfJs(function () {
       if (!window.pdfjsLib) { host.innerHTML = pdfFallback(url); return; }
       pdfjsLib.getDocument({ url: url }).promise.then(function (pdf) {
-        if (modal.hidden) { try { pdf.destroy(); } catch (e) {} return; }   // أُغلق قبل الجاهزية
+        if (!modal.classList.contains("is-open")) { try { pdf.destroy(); } catch (e) {} return; }   // أُغلق قبل الجاهزية
         pdfDoc = pdf;
         return pdf.getPage(1).then(function (p1) {
           var base = p1.getViewport({ scale: 1 });
@@ -772,11 +777,17 @@
 
   function closePdf() {
     if (!modal) return;
-    modal.hidden = true;
+    modal.classList.remove("is-open");                    // يبدأ انتقال الخروج الناعم
     if (pageObserver) { pageObserver.disconnect(); pageObserver = null; }
     if (pdfDoc) { try { pdfDoc.destroy(); } catch (e) {} pdfDoc = null; }
-    $("#pdfPages").innerHTML = "";
     document.body.style.overflow = "";
+    var m = modal;
+    if (closeTimer) clearTimeout(closeTimer);
+    closeTimer = setTimeout(function () {                  // نخفي ونفرّغ بعد انتهاء الحركة
+      m.hidden = true;
+      var pg = $("#pdfPages"); if (pg) pg.innerHTML = "";
+      closeTimer = null;
+    }, 260);
   }
 
   // مؤشر التنقل يتبع القسم الظاهر أثناء التمرير (بدلاً من الثبات على «الرئيسية»)
